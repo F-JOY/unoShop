@@ -56,6 +56,7 @@ const userSchema = new mongoose.Schema(
     },
     photodeprofil: {
       type: String,
+      
     },
   },
   { timestamps: true }

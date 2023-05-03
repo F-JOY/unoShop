@@ -71,5 +71,5 @@ exports.login = asyncHandler(async (req, res, next) => {
   const token = User.generateToken();
   res
     .status(200)
-    .json({ id: User._id, type: User.type, email: User.email, token });
+    .json({ id: User._id, type: User.type , photodeprofil:User.photodeprofil, email: User.email, token });
 });

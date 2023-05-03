@@ -58,11 +58,8 @@ function getStepContent(step, props) {
     case 2:
       return (
         <DetailsInformation
-          nom={props.nom}
-          prenom={props.prenom}
-          adresse={props.adresse}
-          telephone={props.numerotelephone}
-          numeroccp={props.numeroccp}
+         photodeprofil={props.photodeprofil}
+         handlePhotoChange={props.handlePhotoChange}
         />
       );
     default:
@@ -83,6 +80,7 @@ export default function FormInscription(props) {
   const [releverib, setReleverIb] = useState("");
   const [numerotelephone, setNumeroTelephone] = useState("");
   const [type, setType] = useState("Client");
+  const [photodeprofil, setPhotodeprofil] = useState("");
   
   const handleNext = () => {
     if (activeStep == 1 && email != "" && mdp != "") {
@@ -97,6 +95,9 @@ export default function FormInscription(props) {
       numerotelephone != "" &&
       numeroccp != ""
     ) {
+      setActiveStep(activeStep + 1);
+    }
+    if (activeStep == 2) {
       setActiveStep(activeStep + 1);
     }
     if (
@@ -115,7 +116,10 @@ export default function FormInscription(props) {
     }
 
   };
-
+ const handlePhotoChange =(photodeprofil)=>{
+  setPhotodeprofil(photodeprofil);
+  console.log(photodeprofil)
+ }
   const handleTypeChange = (type) => {
     setType(type);
   };
@@ -187,10 +191,13 @@ export default function FormInscription(props) {
           numnif,
           numrc,
           releverib,
+          photodeprofil,
         }),
       });
       const data = await response.json();
       if (response.ok) {
+        localStorage.setItem('token', data.token);
+        props.onData(true);
         console.log("compte créer avec succé");
         console.log(data);
       } else {
@@ -219,6 +226,7 @@ export default function FormInscription(props) {
           email,
           password,
           numccp,
+          photodeprofil,
         }),
       });
       const data = await response.json();
@@ -267,6 +275,15 @@ export default function FormInscription(props) {
               confirmation, and will send you an update when your order has
               shipped.
             </Typography>
+            
+            <Button
+                  variant="contained"
+                  type="submit" variant="contained"
+                  sx={{ mt: 3, ml: 1 }}
+                 
+                >
+                  terminer
+                </Button>
           </Fragment>
         ) : (
           <Fragment>
@@ -297,13 +314,15 @@ export default function FormInscription(props) {
                   handleNumerorcChange,
                   handleNumeronifChange,
                   handleReleveribChange,
-                })
+                }): activeStep == 2 ? 
+                getStepContent(activeStep,{
+                  handlePhotoChange,
+                     photodeprofil
+                  }
+
+                )
               : getStepContent(activeStep, {
-                  nom,
-                  prenom,
-                  adresse,
-                  numerotelephone,
-                  numeroccp,
+               
                 })}
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               {activeStep !== 0 && (
@@ -311,17 +330,13 @@ export default function FormInscription(props) {
                   Back
                 </Button>
               )}
-              {activeStep == 1 ? (
+              {activeStep == steps.length ? (
                 <Button
                   variant="contained"
-                  onClick={handleNext}
+                  type="submit" variant="contained"
                   sx={{ mt: 3, ml: 1 }}
                  
                 >
-                  S'inscrire
-                </Button>
-              ) : activeStep == 2 ? (
-                <Button type="submit" variant="contained" sx={{ mt: 3, ml: 1 }}>
                   terminer
                 </Button>
               ) : (

@@ -12,6 +12,9 @@ function App() {
         <Route exact path="/">
           <Acceuil /> 
         </Route>
+        <Route exact path="/Produits">
+          <Produits /> 
+        </Route>
        
        
       </Switch>

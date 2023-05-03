@@ -6,11 +6,9 @@ const CategorieModel = require("../models/categorieModel");
 //@route GET /api/v1/categories
 //@access PUBLIC
 exports.getCategories = asyncHandler(async (req, res) => {
-  const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 10;
-  const skip = (page - 1) * limit;
-  const categories = await CategorieModel.find({}).skip(skip).limit(limit);
-  res.status(200).json({ result: categories.length, page, data: categories });
+ 
+  const categories = await CategorieModel.find();
+  res.status(200).json(categories);
 });
 
 //@desc Get specific by id categorie
@@ -25,7 +23,7 @@ exports.getCategorieSp = asyncHandler(async (req, res, next) => {
       new ApiError(`la categorie n'existe pas pour cette id ${id}`, 404)
     );
   }
-  res.status(200).json({ data: categories });
+  res.status(200).json({ id: categories._id,name: categories.name });
 });
 
 //@desc   create categorie

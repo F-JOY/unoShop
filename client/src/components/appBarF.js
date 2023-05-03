@@ -22,6 +22,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Avatar,
 } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -48,9 +49,9 @@ const Header = () => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const pages = [
-    { id: 1, name: "Accuiel" },
-    { id: 2, name: "Categories" },
-    { id: 3, name: "Produits" },
+    { id: 1, name: "Accuiel", route: "/" },
+    { id: 2, name: "Categories", route: "/Produits" },
+    { id: 3, name: "Produits", route: "/Produits" },
     { id: 4, name: "A propos" },
   ];
 
@@ -85,12 +86,11 @@ const Header = () => {
   const [dataFromLogin, setDataFromLogin] = useState("");
 
   function handleDataFromLogin(data) {
-    setDataFromLogin(data);
-    if (data) {
-      handleClose();
-      setIsConnected(true);
-    }
+    setPhoto("http://localhost:3001/users/" + data);
+    handleClose();
+    setIsConnected(true);
   }
+
   const [dataFromSign, setDataFromSign] = useState("");
 
   function handleDataFromSign(data) {
@@ -102,18 +102,26 @@ const Header = () => {
   }
 
   const [isConnected, setIsConnected] = useState("");
-
+  const [photo, setPhoto] = useState("");
   useEffect(() => {
     if (localStorage.getItem("token")) {
+      if (localStorage.getItem("photo")) {
+        setPhoto(
+          "http://localhost:3001/users/" + localStorage.getItem("photo")
+        );
+      }
+
       setIsConnected(true);
       console.log(isConnected);
     } else {
       setIsConnected(false);
+      localStorage.removeItem("photo");
     }
   }, []);
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("photo");
     setIsConnected(false);
     handleCloseMenue();
   };
@@ -122,7 +130,7 @@ const Header = () => {
     <AppBar
       sx={{
         background: "white",
-        position: "absolute",
+        position: "fixed",
         zIndex: 1201,
       }}
     >
@@ -178,6 +186,7 @@ const Header = () => {
                           paddingRight: 3,
                           ":hover": { color: "#F39200" },
                         }}
+                        onClick={() => history.push(page.route)}
                       >
                         {page.name}
                       </Link>
@@ -233,6 +242,7 @@ const Header = () => {
                 </IconButton>
                 {isConnected ? (
                   <>
+                    {" "}
                     <IconButton
                       id="basic-button"
                       aria-controls={openMenue ? "basic-menu" : undefined}
@@ -241,9 +251,7 @@ const Header = () => {
                       onClick={handleClickMenue}
                       //</> onClick={()=> handleLogOut()}
                     >
-                      <AccountCircleIcon
-                        sx={{ color: "black", fontSize: "30px" }}
-                      />
+                      <Avatar src={photo}></Avatar>
                     </IconButton>
                     <Menu
                       id="basic-menu"
@@ -381,33 +389,33 @@ const Header = () => {
 
                   {isConnected ? (
                     <>
-                    <IconButton
-                      id="basic-button"
-                      aria-controls={openMenue ? "basic-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={openMenue ? "true" : undefined}
-                      onClick={handleClickMenue}
-                      //</> onClick={()=> handleLogOut()}
-                    >
-                      <AccountCircleIcon
-                        sx={{ color: "black", fontSize: "30px" }}
-                      />
-                    </IconButton>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={openMenue}
-                      onClose={handleCloseMenue}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                      }}
-                    >
-                      <MenuItem>Profile</MenuItem>
-                      <MenuItem onClick={() => handleLogOut()}>
-                        Se deconnecter
-                      </MenuItem>
-                    </Menu>
-                  </>
+                      <IconButton
+                        id="basic-button"
+                        aria-controls={openMenue ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openMenue ? "true" : undefined}
+                        onClick={handleClickMenue}
+                        //</> onClick={()=> handleLogOut()}
+                      >
+                        <AccountCircleIcon
+                          sx={{ color: "black", fontSize: "30px" }}
+                        />
+                      </IconButton>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openMenue}
+                        onClose={handleCloseMenue}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem>Profile</MenuItem>
+                        <MenuItem onClick={() => handleLogOut()}>
+                          Se deconnecter
+                        </MenuItem>
+                      </Menu>
+                    </>
                   ) : (
                     <>
                       <Button

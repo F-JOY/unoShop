@@ -19,7 +19,7 @@ export const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  let state=true;
+  //String state;
 
   const handleSubmit = async (event) => {
     
@@ -36,18 +36,18 @@ export const Login = (props) => {
     
       if (response.ok) {
          if(data.token){
+          console.log(data)
         localStorage.setItem('token', data.token);
-        state=true;
-        props.onData(state);
+        localStorage.setItem('photo',data.photodeprofil);
+        props.onData(data.photodeprofil);
         } 
         console.log(data.email);
         console.log(data.token);
        
       } else {
         setError(true);
-        state=false;
         console.log("Connexion échouée");
-        props.onData(state)
+       
       }
     } catch (error) {
       console.error(error);
