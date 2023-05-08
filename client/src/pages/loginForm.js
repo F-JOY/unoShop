@@ -37,10 +37,13 @@ export const Login = (props) => {
       if (response.ok) {
          if(data.token){
           console.log(data)
+          console.log(data.type)
         localStorage.setItem('token', data.token);
         localStorage.setItem('photo',data.photodeprofil);
+        localStorage.setItem('type',data.type);
+        localStorage.setItem('userId',data.id)
         props.onData(data.photodeprofil);
-        } 
+        props.userType(data.type);        } 
         console.log(data.email);
         console.log(data.token);
        
@@ -106,7 +109,7 @@ export const Login = (props) => {
             sx={{
               mt: 3,
               mb: 2,
-              backgroundColor: "#69d2e7",
+              backgroundColor: "#0049f2",
               ":hover": { backgroundColor: "#F39200" },
             }}
            // onClick={handleClick}

@@ -26,7 +26,20 @@ exports.getProducts = factory.getAll(product);
 **@Acces PUBLIC
 -----------------------------*/
 
-exports.getSpeProduct = factory.getOne(product);
+exports.getSpeProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const products = await product
+    .findById(id)
+    .populate({ path: "fournisseur", select: "_id nom prenom numtel email" });
+  if (!products) {
+    // res.status(404).json({msg:`la categorie n'existe pas pour cette id ${id}`});
+    return next(
+      new ApiError(`le produit n'existe pas pour cette id ${id}`, 404)
+     
+    );
+  }
+  res.status(200).json({ data: products });
+});
 
 /*-----------------------------
 **@desc UPDATE Specifique Product
@@ -70,10 +83,10 @@ exports.deleteProduct = factory.deleteOne(product);
 **@Acces PUBLIC 
 -----------------------------*/
 exports.getProductsByCategory = asyncHandler(async (req, res, next) => {
-  const idcat = req.params.categories;
-  const document = await product.find({ categorie: idcat });
+  const {prop} = req.params;
+  const document = await product.find({ categorie: prop });
   if (!document) {
-    return next(new ApiError(`No document for this id ${req.params.id}`, 404));
+    return next(new ApiError(`No document for this id ${req.params}`, 404));
   }
   res.status(200).json({ data: document });
 });

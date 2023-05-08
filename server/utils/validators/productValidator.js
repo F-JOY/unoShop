@@ -88,7 +88,7 @@ exports.deleteProductValidator = [
 ];
 
 exports.getproductbycatValidator = [
-  check("categories").isMongoId().withMessage("Invalid ID"),
+  check("prop").isMongoId().withMessage("Invalid ID"),
   validatorMiddleware,
 ];
 exports.getproductbyFournisseurValidator = [

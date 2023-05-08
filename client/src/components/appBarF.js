@@ -23,12 +23,14 @@ import {
   DialogContent,
   DialogActions,
   Avatar,
+  Badge,
 } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import CategoryIcon from "@mui/icons-material/Category";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -44,14 +46,14 @@ import { Favorit } from "../pages/wishList";
 import FormInscription from "../pages/FormInscription";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-const Header = () => {
+const Header = (props) => {
   const [value, setValue] = useState();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const pages = [
     { id: 1, name: "Accuiel", route: "/" },
-    { id: 2, name: "Categories", route: "/Produits" },
-    { id: 3, name: "Produits", route: "/Produits" },
+    { id: 2, name: "Categories & Produits", route: "/Produits" },
+
     { id: 4, name: "A propos" },
   ];
 
@@ -94,36 +96,60 @@ const Header = () => {
   const [dataFromSign, setDataFromSign] = useState("");
 
   function handleDataFromSign(data) {
-    setDataFromSign(data);
-    if (data) {
-      handleClose();
-      setIsConnected(true);
-    }
+    setPhoto("http://localhost:3001/users/" + data);
+    handleClose();
+    setIsConnected(true);
   }
+  const [userId, setUser] = useState("");
+  const handleUserid = (id) => {
+    setUser(id);
+    localStorage.setItem("id", id);
+  };
 
+  const [type, setType] = useState([]);
+
+  function handleUserType(userType) {
+    setType(userType[0]);
+  }
+  const [cartItems, setCartItems] = useState([]);
   const [isConnected, setIsConnected] = useState("");
   const [photo, setPhoto] = useState("");
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      if (localStorage.getItem("photo")) {
-        setPhoto(
-          "http://localhost:3001/users/" + localStorage.getItem("photo")
-        );
-      }
+  const [isFornisseur, setIsfournisseur] = useState(false);
 
+  useEffect(() => {
+    if (localStorage.getItem("photo")) {
+      setPhoto("http://localhost:3001/users/" + localStorage.getItem("photo"));
+    }
+
+    if (localStorage.getItem("token")) {
       setIsConnected(true);
-      console.log(isConnected);
+      
     } else {
       setIsConnected(false);
       localStorage.removeItem("photo");
     }
-  }, []);
+    const array = localStorage.getItem("type");
+    setCartItems(props.cartData);
+  }, [props.cartData]);
+
+  const updateCart = (newCartData) => {
+    setCartItems(newCartData);
+    props.updatedPanierProduct(newCartData);
+  };
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("photo");
+    localStorage.removeItem("type");
+    localStorage.removeItem("typeCompt");
+    localStorage.removeItem("userId")
     setIsConnected(false);
     handleCloseMenue();
+    setType("");
+  };
+  const [count, setCount] = useState(0);
+  const handleCountChange = (deletedCount) => {
+    setCount(deletedCount);
   };
 
   return (
@@ -147,67 +173,45 @@ const Header = () => {
               <Grid
                 item
                 xs={12}
-                md={4}
-                sm={6}
+                md={1}
+                sm={3}
                 display="flex"
                 alignItems="flex-start"
               >
-                <IconButton
-                  sx={{ color: "black" }}
-                  onClick={() => setOpenDrawer(!openDrawer)}
-                >
-                  <MenuIcon sx={{ fontSize: "40px" }} />
-                </IconButton>
-                <Drawer
-                  variant="temporary"
-                  anchor="top"
-                  open={openDrawer}
-                  onClose={() => setOpenDrawer(false)}
-                >
-                  {" "}
-                  <Box height={80}></Box>
-                  <Grid
-                    item
-                    display={"flex"}
-                    justifyContent="center"
-                    alignContent="center"
-                    alignItems="center"
-                    paddingBottom={"10px"}
-                  >
-                    {pages.map((page, index) => (
-                      <Link
-                        href="#"
-                        variant="button"
-                        underline="hover"
-                        color={"gray"}
-                        fontSize="15px"
-                        sx={{
-                          paddingLeft: 3,
-                          paddingRight: 3,
-                          ":hover": { color: "#F39200" },
-                        }}
-                        onClick={() => history.push(page.route)}
-                      >
-                        {page.name}
-                      </Link>
-                    ))}
-                  </Grid>
-                </Drawer>
                 <img
                   src={UnoV4}
                   alt="Logo Image"
                   style={{ width: "65px", height: "40px", marginTop: 10 }}
                 />
               </Grid>
-              <Grid item xs={12} md={4} sm={6} justifyContent="center">
+              <Grid item xs={12} md={8} sm={3} display={"flex"}>
+                {pages.map((page, index) => (
+                  <Link
+                    href="#"
+                    variant="button"
+                    underline="hover"
+                    color={"gray"}
+                    fontSize="14px"
+                    sx={{
+                      paddingLeft: 3,
+                      paddingRight: 3,
+                      paddingTop: 1,
+                      ":hover": { color: "#F39200" },
+                    }}
+                    onClick={() => history.push(page.route)}
+                  >
+                    {page.name}
+                  </Link>
+                ))}
                 <Box
-                  border={2}
+                  border={"solid 1px"}
                   borderColor="black"
                   height="35px"
+                  width={"300px"}
                   display="flex"
                   paddingLeft="10px"
                   borderRadius="18px"
-                  justifyContent={"center"}
+                  marginRight={10}
                 >
                   <InputBase
                     sx={{
@@ -221,25 +225,48 @@ const Header = () => {
                   </IconButton>
                 </Box>
               </Grid>
+
               <Grid
                 item
                 xs={12}
-                md={4}
-                sm={6}
+                md={3}
+                sm={3}
                 display="flex"
                 justifyContent={"end"}
                 alignItems="center"
               >
-                <IconButton onClick={() => handleButtonClick(<Favorit />)}>
-                  <FavoriteBorderOutlinedIcon
-                    sx={{ color: "black", fontSize: "30px" }}
-                  />
-                </IconButton>
-                <IconButton onClick={() => handleButtonClick(<Panier />)}>
-                  <LocalMallOutlinedIcon
-                    sx={{ color: "black", fontSize: "30px" }}
-                  />
-                </IconButton>
+                {type !== "Fournisseurs" &&
+                localStorage.getItem("type") !== "Fournisseurs" ? (
+                  <>
+                    <IconButton onClick={() => handleButtonClick(<Favorit />)}>
+                      <FavoriteBorderOutlinedIcon
+                        sx={{ color: "black", fontSize: "30px" }}
+                      />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
+                        handleButtonClick(
+                          <Panier
+                            cartData={cartItems}
+                            count={handleCountChange}
+                            updateCart={updateCart}
+                          />,
+                          true
+                        );
+                      }}
+                      sx={{ marginRight: "7px" }}
+                    >
+                      <Badge badgeContent={cartItems.length} color="primary">
+                        <ShoppingCartOutlinedIcon
+                          sx={{ color: "black", fontSize: "30px" }}
+                        />
+                      </Badge>
+                    </IconButton>
+                  </>
+                ) : (
+                  <Typography color={"red"}>Fournisseurs</Typography>
+                )}
+
                 {isConnected ? (
                   <>
                     {" "}
@@ -262,7 +289,24 @@ const Header = () => {
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem>Profile</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          console.log(localStorage.getItem("type"))
+                          localStorage.setItem("typeCompt", localStorage.getItem("type"));
+                          type === "Fournisseurs" ||
+                          localStorage.getItem("typeCompt") === "Fournisseurs"
+                            ? history.push("/ProfilFournis")
+                            : type === "Client" ||
+                              localStorage.getItem("typeCompt") === "Client"
+                            ? history.push("/ProfilClient")
+                            : type === "Admin" ||
+                              localStorage.getItem("typeCompt") === "Admin"
+                            ? history.push("/ProfilAdmin")
+                            : history.push("/ProfilClient");
+                        }}
+                      >
+                        Profile
+                      </MenuItem>
                       <MenuItem onClick={() => handleLogOut()}>
                         Se deconnecter
                       </MenuItem>
@@ -271,12 +315,13 @@ const Header = () => {
                 ) : (
                   <>
                     <Button
-                      variant="contained"
+                      variant="outlined"
                       sx={{
                         borderRadius: "15px",
-                        backgroundColor: "#69d2e7",
+                        borderColor: "#0049f2",
+                        color: "#0049f2",
                         marginRight: 1,
-                        ":hover": { backgroundColor: "#F39200" },
+                        ":hover": { color: "#F39200", borderColor: "#F39200" },
                       }}
                       onClick={() =>
                         handleButtonClick(
@@ -291,12 +336,16 @@ const Header = () => {
                       variant="contained"
                       sx={{
                         borderRadius: "15px",
-                        backgroundColor: "#69d2e7",
+                        backgroundColor: "#0049f2",
                         ":hover": { backgroundColor: "#F39200" },
                       }}
                       onClick={() => {
                         handleButtonClick(
-                          <Login onData={handleDataFromLogin} />,
+                          <Login
+                            onData={handleDataFromLogin}
+                            userId={handleUserid}
+                            userType={handleUserType}
+                          />,
                           false
                         );
                       }}
@@ -344,6 +393,7 @@ const Header = () => {
                         paddingRight: 1,
                         ":hover": { color: "#F39200" },
                       }}
+                      onClick={() => history.push(page.route)}
                     >
                       {page.name}
                     </Link>
@@ -381,10 +431,26 @@ const Header = () => {
                       sx={{ color: "black", fontSize: "20px" }}
                     />
                   </IconButton>
-                  <IconButton>
-                    <LocalMallOutlinedIcon
-                      sx={{ color: "black", fontSize: "20px" }}
-                    />
+                  <IconButton
+                    onClick={() => {
+                      handleButtonClick(
+                        <Panier
+                          cartData={cartItems}
+                          count={handleCountChange}
+                          updateCart={updateCart}
+                        />,
+                        true
+                      );
+                    }}
+                  >
+                    <Badge
+                      badgeContent={cartItems.length}
+                      style={{ backgroundColor: "#F39200" }}
+                    >
+                      <ShoppingCartOutlinedIcon
+                        sx={{ color: "black", fontSize: "30px" }}
+                      />
+                    </Badge>
                   </IconButton>
 
                   {isConnected ? (
@@ -419,13 +485,15 @@ const Header = () => {
                   ) : (
                     <>
                       <Button
-                        variant="contained"
+                        variant="outlined"
                         sx={{
                           height: "30px",
                           fontSize: "10px",
                           borderRadius: "15px",
-                          backgroundColor: "#69d2e7",
+                          backgroundColor: "#0049f2",
+                          color: "#0049f2",
                           marginRight: 1,
+                          marginLeft: 2,
                           ":hover": { backgroundColor: "#F39200" },
                         }}
                         onClick={() =>
@@ -443,12 +511,16 @@ const Header = () => {
                           fontSize: "10px",
                           height: "30px",
                           borderRadius: "15px",
-                          backgroundColor: "#69d2e7",
+                          backgroundColor: "#0049f2",
                           ":hover": { backgroundColor: "#F39200" },
                         }}
                         onClick={() => {
                           handleButtonClick(
-                            <Login onData={handleDataFromLogin} />,
+                            <Login
+                              onData={handleDataFromLogin}
+                              userId={handleUserid}
+                              userType={handleUserType}
+                            />,
                             false
                           );
                         }}

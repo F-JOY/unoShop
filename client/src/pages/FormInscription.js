@@ -118,7 +118,7 @@ export default function FormInscription(props) {
   };
  const handlePhotoChange =(photodeprofil)=>{
   setPhotodeprofil(photodeprofil);
-  console.log(photodeprofil)
+
  }
   const handleTypeChange = (type) => {
     setType(type);
@@ -169,40 +169,36 @@ export default function FormInscription(props) {
   const numccp = numeroccp;
   const numnif = numeronif;
   const numrc = numerorc;
-
+ //const photo =photodeprofil.name
   const handleSubmitFour = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/api/v1/users", {
+      const formData = new FormData();
+      formData.append('type', type);
+      formData.append('nom', nom);
+      formData.append('prenom', prenom);
+      formData.append('adresse', adresse);
+      formData.append('numtel', numtel);
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('numccp', numccp);
+      formData.append('numnif', numnif);
+      formData.append('numrc', numrc);
+      formData.append('releverib', releverib);
+       formData.append('photodeprofil',photodeprofil);
+      const response = await fetch("http://localhost:3001/api/v1/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          type,
-          nom,
-          prenom,
-          adresse,
-          numtel,
-          email,
-          password,
-          numccp,
-          numnif,
-          numrc,
-          releverib,
-          photodeprofil,
-        }),
+        body: formData,
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        props.onData(true);
+        localStorage.setItem('photo',data.data.photodeprofil);
+        props.onData(data.data.photodeprofil);
         console.log("compte créer avec succé");
-        console.log(data);
+        console.log(photodeprofil);
       } else {
         console.log("Connexion échouée");
-        console.log(data);
+        
       }
     } catch (error) {
       console.error(error);
@@ -211,30 +207,28 @@ export default function FormInscription(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/api/v1/users", {
+      const formData = new FormData();
+      formData.append('type', type);
+      formData.append('nom', nom);
+      formData.append('prenom', prenom);
+      formData.append('adresse', adresse);
+      formData.append('numtel', numtel);
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('numccp', numccp);
+       formData.append('photodeprofil',photodeprofil);
+     
+      const response = await fetch("http://localhost:3001/api/v1/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          type,
-          nom,
-          prenom,
-          adresse,
-          numtel,
-          email,
-          password,
-          numccp,
-          photodeprofil,
-        }),
+        body: formData,
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        props.onData(true);
+        
+        localStorage.setItem('photo',data.data.photodeprofil);
+        props.onData(data.data.photodeprofil);
         console.log("compte créer avec succé");
-        console.log(data);
+        console.log(data.data.photodeprofil);
       } else {
         console.log("Connexion échouée");
         console.log(data);

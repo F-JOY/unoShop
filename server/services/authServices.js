@@ -11,6 +11,7 @@ exports.uploadUserImage = uploadSingleImage("photodeprofil");
 
 // Image processing
 exports.resizeImage = asyncHandler(async (req, res, next) => {
+  console.log("avant l'execution:"+req.body.photodeprofil);
   const filename = `user-${uuidv4()}-${Date.now()}.jpeg`;
 
   if (req.file) {
@@ -19,11 +20,12 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
       .toFormat("jpeg")
       .jpeg({ quality: 95 })
       .toFile(`uploads/users/${filename}`);
-
+     console.log("dans le condition if "+filename)
     // Save image into our db
     req.body.photodeprofil = filename;
   }
 
+console.log("avant d'enregistrer dans le registre photdeprofil " + req.body.photodeprofil);
   next();
 });
 /*----------------------------------------
@@ -49,7 +51,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     type: req.body.type,
     photodeprofil: req.body.photodeprofil,
   });
-  console.log(user);
+  console.log(user.photodeprofil);
   res.status(200).json({ data: newUser, message: "please log in" });
 });
 

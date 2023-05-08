@@ -34,9 +34,8 @@ export default function DetailsInformation(props) {
               name="photodeprofil"
               type="file"
               id="photodeprofil"
-              value={props.photodeprofil}
-              placeholder='upload'
-              onChange={(e) => props.handlePhotoChange(e.target.value)}
+              value=""
+              onChange={(e) => props.handlePhotoChange(e.target.files[0])}
             />
           </Grid>
         </Grid>

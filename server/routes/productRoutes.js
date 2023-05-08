@@ -58,8 +58,8 @@ router
 **@Acces PUBLIC 
 -----------------------------*/
 router
-  .route("/categories/:categories")
-  .get(getproductbycatValidator, getProductsByFournisseur);
+  .route("/categories/:prop")
+  .get(getproductbycatValidator, getProductsByCategory);
 
 /*-----------------------------
 **@desc Get les produit dun fournisseur ou admin donne 
