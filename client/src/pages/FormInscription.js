@@ -186,18 +186,23 @@ export default function FormInscription(props) {
       formData.append('numrc', numrc);
       formData.append('releverib', releverib);
        formData.append('photodeprofil',photodeprofil);
+      const test =formData.get("photodeprofil");
+
       const response = await fetch("http://localhost:3001/api/v1/auth/register", {
         method: "POST",
         body: formData,
       });
+
+      
       const data = await response.json();
       if (response.ok) {
-        console.log(formData.get('photodeprofil'))
+          
         localStorage.setItem('photo',data.data.photodeprofil);
         props.onData(data.data.photodeprofil);
         console.log("compte créer avec succé");
         console.log(photodeprofil);
       } else {
+     
         console.log("Connexion échouée");
         
       }
@@ -205,6 +210,8 @@ export default function FormInscription(props) {
       console.error(error);
     }
   };
+
+  
   const handleSubmit = async (event) => {
     
     event.preventDefault();
@@ -219,19 +226,21 @@ export default function FormInscription(props) {
       formData.append('password', password);
       formData.append('numccp', numccp);
        formData.append('photodeprofil',photodeprofil);
-     
+       
       const response = await fetch("http://localhost:3001/api/v1/auth/register", {
         method: "POST",
         body: formData,
       });
       const data = await response.json();
       if (response.ok) {
-        
+        console.log(formData.get("photodeprofil"))
         localStorage.setItem('photo',data.data.photodeprofil);
         props.onData(data.data.photodeprofil);
         console.log("compte créer avec succé");
         console.log(data.data.photodeprofil);
       } else {
+        console.log(formData.get("photodeprofil"))
+
         console.log("Connexion échouée");
         console.log(data);
       }

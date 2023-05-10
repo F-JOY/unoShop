@@ -16,18 +16,19 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ArrowDropDownSharpIcon from "@mui/icons-material/ArrowDropDownSharp";
 import ArrowDropUpSharpIcon from "@mui/icons-material/ArrowDropUpSharp";
-import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
+import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import { width } from "@mui/system";
 export const Panier = (props) => {
-const [products, setProducts] = useState(props.cartData);
-const [countDelet,setCountDelet]=useState(1);
-const  type=localStorage.getItem("typeCompt");
+  const [products, setProducts] = useState(props.cartData);
+  const [user, setUser] = useState(localStorage.getItem("userId"));
+  const [adresse, setAdresse] = useState([]);
+  const [telephone, setTelephone] = useState("");
+  const authToken = "Bearer " + localStorage.getItem("token");
+  //////////////////////incrementation de la quntity choisit du produit////////////////////////
 
-
-  const incrementQuantity = (productId,qnt) => {
+  const incrementQuantity = (productId, qnt) => {
     const updatedProducts = products.map((product) => {
-      
-      if (product._id === productId && product.quantity<qnt) {
+      if (product._id === productId && product.quantity < qnt) {
         return { ...product, quantity: product.quantity + 1 };
       } else {
         return product;
@@ -36,6 +37,7 @@ const  type=localStorage.getItem("typeCompt");
     setProducts(updatedProducts);
     props.updateCart(updatedProducts);
   };
+  //////////////////////decrementation de la quntity choisit du produit////////////////////////
   const decrementQuantity = (productId) => {
     const updatedProducts = products.map((product) => {
       if (product._id === productId && product.quantity > 0) {
@@ -47,22 +49,87 @@ const  type=localStorage.getItem("typeCompt");
     setProducts(updatedProducts);
     props.updateCart(updatedProducts);
   };
-
+  /////////////////////// supprimer un produit de la liste des produit du panier////////////////////
   const removeProduct = (productId) => {
     const updatedProducts = [...products].filter(
       (product) => product._id !== productId
     );
-    setCountDelet(countDelet+1)
+
     setProducts(updatedProducts);
     props.updateCart(updatedProducts);
-    props.count(countDelet);
-    
   };
- 
+  ////////////////////////////calcule le prix des totale de produit dans le panier////////////////////
   const totalPrix = products.reduce((acc, item) => {
-    return acc + item.nouveauprix * item.quantity ;
+    return acc + item.nouveauprix * item.quantity;
   }, 0);
 
+  //////////////////////redwire les  propriété de liste des produits/////////////
+  const orderItems = products.map((prod) => {
+    return { product: prod._id, quantite: prod.quantity };
+  });
+  /////////////////////recuperer Adresse et telephone du user//////////////////
+  ///////////////////Asynchronisation functions issus//////////////////////
+  /////////////n the use effect hook to set the adresse and telephone whene panier rendered ///////////
+  useEffect(() => {
+    getUserById(localStorage.getItem("userId"));
+  }, []);
+  const getUserById = async (userId) => {
+    try {
+      const authToken = "Bearer " + localStorage.getItem("token");
+      const response = await fetch(
+        "http://localhost:3001/api/v1/users/" + userId,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authToken,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        console.log("user gotten");
+        console.log(data);
+        setAdresse(data.data.adresse[0]);
+        setTelephone(data.data.numtel);
+      } else {
+        console.log(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  ///////////////////////http request for order//////////////////////////////
+  const Acheter = async () => {
+    try {
+      const authToken = "Bearer " + localStorage.getItem("token");
+      const requestBody = {
+        orderItems: orderItems,
+        adresse: adresse,
+        telephone: telephone,
+        user: user,
+      };
+      const response = await fetch("http://localhost:3001/api/v1/order", {
+        method: "POST",
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/json",
+          Authorization: authToken,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Order successful");
+        console.log(data);
+      } else {
+        console.log(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
@@ -76,31 +143,38 @@ const  type=localStorage.getItem("typeCompt");
           <Grid container display="flex">
             <Grid item md={6}>
               <Box display="block">
-              <Typography variant="h5" >
-                Mon Panier
-              </Typography>
-              <Typography variant="body1" >
-                Totale Prix : {totalPrix} DA
-              </Typography>
+                <Typography variant="h5">Mon Panier</Typography>
+                <Typography variant="body1">
+                  Totale Prix : {totalPrix} DA
+                </Typography>
               </Box>
-             
             </Grid>
-            <Grid item md={6} display="flex" AlignContent="end" justifyContent="end" paddingRight="20px">
+            <Grid
+              item
+              md={6}
+              display="flex"
+              AlignContent="end"
+              justifyContent="end"
+              paddingRight="20px"
+            >
               <Button
                 variant="contained"
                 sx={{
-                  height :"35px",
+                  height: "35px",
                   paddingLeft: "15px",
                   paddingRight: "15px",
                   borderRadius: "15px",
                   backgroundColor: "#0049f2",
                 }}
+                onClick={() => {
+                  Acheter();
+                }}
               >
                 Acheter
                 <InventoryOutlinedIcon
-                          fontSize="small"
-                          sx={{marginLeft:"4px", color: "white" }}
-                        />
+                  fontSize="small"
+                  sx={{ marginLeft: "4px", color: "white" }}
+                />
               </Button>
             </Grid>
           </Grid>
@@ -184,17 +258,17 @@ const  type=localStorage.getItem("typeCompt");
                             borderRadius: "50%",
                           }}
                           onClick={() => {
-                            incrementQuantity(prod._id,prod.quantite);
+                            incrementQuantity(prod._id, prod.quantite);
                           }}
                         >
                           <AddIcon fontSize="small" sx={{ color: "black" }} />
                         </IconButton>
                       </Box>
-                      <Button 
+                      <Button
                         variant="contained"
                         sx={{
-                          marginLeft:"230px",
-    
+                          marginLeft: "230px",
+
                           paddingLeft: "15px",
                           paddingRight: "15px",
                           borderRadius: "15px",
@@ -202,14 +276,14 @@ const  type=localStorage.getItem("typeCompt");
                         }}
                         onClick={() => {
                           removeProduct(prod._id);
-                          console.log(products)
+                          console.log(products);
                         }}
                       >
                         {" "}
                         Supprimer
                         <DeleteOutlineIcon
                           fontSize="small"
-                          sx={{ color: "white",marginBottom:"3px" }}
+                          sx={{ color: "white", marginBottom: "3px" }}
                         />
                       </Button>
                     </Box>

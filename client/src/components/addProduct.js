@@ -64,7 +64,7 @@ export const AddProduct = () => {
     formData.append("imageCover", imageCover);
     formData.append("images", images);
     const compressedFormData = await compressFormData(formData);
-    console.log(compressedFormData);
+    
     try {
       const response = await fetch("http://localhost:3001/api/v1/products", {
         method: "POST",
@@ -78,6 +78,8 @@ export const AddProduct = () => {
       if (response.ok) {
         console.log("produit Ajouter");
       } else {
+        console.log(formData.get("images"));
+        console.log(formData.get("imageCover"));
         console.log("creation échouée");
         console.log(data);
       }
@@ -140,6 +142,7 @@ export const AddProduct = () => {
             <InputLabel>Image Principale</InputLabel>
             <TextField
               type="file"
+              value=""
               fullWidth
               onChange={(e) => setImageCover(e.target.files[0])}
             />

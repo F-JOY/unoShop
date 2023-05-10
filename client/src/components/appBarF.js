@@ -53,7 +53,6 @@ const Header = (props) => {
   const pages = [
     { id: 1, name: "Accuiel", route: "/" },
     { id: 2, name: "Categories & Produits", route: "/Produits" },
-
     { id: 4, name: "A propos" },
   ];
 
@@ -72,6 +71,15 @@ const Header = (props) => {
   const [open, setOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState("");
   const [dialogW, setDialogW] = useState(false);
+  const [dataFromLogin, setDataFromLogin] = useState("");
+  const [dataFromSign, setDataFromSign] = useState("");
+  const [userId, setUser] = useState("");
+  const [type, setType] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [isConnected, setIsConnected] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [isFornisseur, setIsfournisseur] = useState(false);
+  ////////////////////////fonction du dialogue////////////////////
   const handleOpen = () => {
     setOpen(true);
   };
@@ -85,37 +93,31 @@ const Header = (props) => {
     setDialogW(W);
     handleOpen();
   };
-  const [dataFromLogin, setDataFromLogin] = useState("");
 
+  /////////////////recuperer les props de photo de profile de formulaire  de connexion///////////////
   function handleDataFromLogin(data) {
     setPhoto("http://localhost:3001/users/" + data);
     handleClose();
     setIsConnected(true);
   }
-
-  const [dataFromSign, setDataFromSign] = useState("");
+  /////////////////recuperer les props de photo de profile de formulaire  d'inscription///////////////
 
   function handleDataFromSign(data) {
     setPhoto("http://localhost:3001/users/" + data);
     handleClose();
     setIsConnected(true);
   }
-  const [userId, setUser] = useState("");
+  ////////////////////////props id user et type user from login ////////////////
   const handleUserid = (id) => {
     setUser(id);
     localStorage.setItem("id", id);
   };
 
-  const [type, setType] = useState([]);
-
   function handleUserType(userType) {
     setType(userType[0]);
   }
-  const [cartItems, setCartItems] = useState([]);
-  const [isConnected, setIsConnected] = useState("");
-  const [photo, setPhoto] = useState("");
-  const [isFornisseur, setIsfournisseur] = useState(false);
 
+  //////////////////////////////les operations a effectuer lors de chargement de component ///////////////////////
   useEffect(() => {
     if (localStorage.getItem("photo")) {
       setPhoto("http://localhost:3001/users/" + localStorage.getItem("photo"));
@@ -123,7 +125,6 @@ const Header = (props) => {
 
     if (localStorage.getItem("token")) {
       setIsConnected(true);
-      
     } else {
       setIsConnected(false);
       localStorage.removeItem("photo");
@@ -136,20 +137,16 @@ const Header = (props) => {
     setCartItems(newCartData);
     props.updatedPanierProduct(newCartData);
   };
-
+  ////////////////////////// deconnexion///////////////////////////////////
   const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("photo");
     localStorage.removeItem("type");
     localStorage.removeItem("typeCompt");
-    localStorage.removeItem("userId")
+    localStorage.removeItem("userId");
     setIsConnected(false);
     handleCloseMenue();
     setType("");
-  };
-  const [count, setCount] = useState(0);
-  const handleCountChange = (deletedCount) => {
-    setCount(deletedCount);
   };
 
   return (
@@ -248,7 +245,6 @@ const Header = (props) => {
                         handleButtonClick(
                           <Panier
                             cartData={cartItems}
-                            count={handleCountChange}
                             updateCart={updateCart}
                           />,
                           true
@@ -264,7 +260,9 @@ const Header = (props) => {
                     </IconButton>
                   </>
                 ) : (
-                  <Typography variant="body2" color={"black"}>Fournisseurs</Typography>
+                  <Typography variant="body2" color={"black"}>
+                    Fournisseurs
+                  </Typography>
                 )}
 
                 {isConnected ? (
@@ -291,8 +289,11 @@ const Header = (props) => {
                     >
                       <MenuItem
                         onClick={() => {
-                          console.log(localStorage.getItem("type"))
-                          localStorage.setItem("typeCompt", localStorage.getItem("type"));
+                          console.log(localStorage.getItem("type"));
+                          localStorage.setItem(
+                            "typeCompt",
+                            localStorage.getItem("type")
+                          );
                           type === "Fournisseurs" ||
                           localStorage.getItem("typeCompt") === "Fournisseurs"
                             ? history.push("/ProfilFournis")
@@ -434,11 +435,7 @@ const Header = (props) => {
                   <IconButton
                     onClick={() => {
                       handleButtonClick(
-                        <Panier
-                          cartData={cartItems}
-                          count={handleCountChange}
-                          updateCart={updateCart}
-                        />,
+                        <Panier cartData={cartItems} updateCart={updateCart} />,
                         true
                       );
                     }}
