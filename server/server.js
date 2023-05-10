@@ -43,11 +43,40 @@ app.get("/users/:filename", (req, res) => {
   const filepath = path.join(__dirname, "uploads", "users", filename);
   res.sendFile(filepath);
 });
+
+
 app.get("/products/:filename", (req, res) => {
   const filename = req.params.filename;
   const filepath = path.join(__dirname, "uploads", "products", filename);
   res.sendFile(filepath);
 });
+
+
+
+app.get("/products/:filename", async (req, res) => {
+  try {
+    const filename = req.params.filename;
+    const filepath = path.join(__dirname, "uploads", "products", filename);
+
+    // Read the file data
+    const fileData = await fs.promises.readFile(filepath);
+
+    // Compress the file data using compressFormData function
+    const compressedData = await compressFormData(fileData);
+
+    // Set appropriate response headers for compressed data
+    res.set('Content-Type', 'application/octet-stream');
+    res.set('Content-Disposition', 'attachment; filename="compressed-file.txt"');
+
+    // Send the compressed data as a response
+    res.send(compressedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to compress and send the file' });
+  }
+});
+
+
 //Mount Rouutes
 
 app.use("/api/v1/categories", categorieRoutes);

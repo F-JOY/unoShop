@@ -264,7 +264,7 @@ const Header = (props) => {
                     </IconButton>
                   </>
                 ) : (
-                  <Typography color={"red"}>Fournisseurs</Typography>
+                  <Typography variant="body2" color={"black"}>Fournisseurs</Typography>
                 )}
 
                 {isConnected ? (

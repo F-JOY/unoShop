@@ -116,7 +116,7 @@ exports.uploadProductImages = uploadMixOfImages([
   },
   {
     name: "images",
-    maxCount: 5,
+    maxCount: 3,
   },
 ]);
 
@@ -133,7 +133,9 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
       .toFile(`uploads/products/${imageCoverFileName}`);
 
     // Save image into our db
+    console.log(imageCoverFileName)
     req.body.imageCover = imageCoverFileName;
+    console.log(req.body.imageCover)
   }
   //2- Image processing for images
   if (req.files.images) {

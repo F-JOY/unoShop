@@ -192,6 +192,7 @@ export default function FormInscription(props) {
       });
       const data = await response.json();
       if (response.ok) {
+        console.log(formData.get('photodeprofil'))
         localStorage.setItem('photo',data.data.photodeprofil);
         props.onData(data.data.photodeprofil);
         console.log("compte créer avec succé");
@@ -205,6 +206,7 @@ export default function FormInscription(props) {
     }
   };
   const handleSubmit = async (event) => {
+    
     event.preventDefault();
     try {
       const formData = new FormData();

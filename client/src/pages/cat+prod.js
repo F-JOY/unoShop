@@ -37,9 +37,18 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import AddBusinessRoundedIcon from '@mui/icons-material/AddBusinessRounded';
 import heartplus from "../icons/heart.png";
+import { AddProduct } from "../components/addProduct";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBack from "@mui/icons-material/ArrowBack";
 export default function Produits(props) {
   const [open, setOpen] = useState(false);
-
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
   const drawerWidth = 240;
   const useStyles = makeStyles({
     drawerContainer: {
@@ -52,9 +61,7 @@ export default function Produits(props) {
   const [catClicked, setCatClicked] = useState(false);
   const [categorie, setCategorie] = useState([]);
   const [produit, setProduit] = useState([]);
-
   const [catName, setCatName] = useState("");
-
   const [catProd, setCatProd] = useState([]);
   const [prodDetaile, setProdDetail] = useState("");
   const [fournisseur, setFrounisseur] = useState({});
@@ -63,15 +70,18 @@ export default function Produits(props) {
   const [imageCover,setImageCover]=useState('');
   const [panierProduct,setPanierProduct]=useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
-  
+  const [type,setType]=useState(localStorage.getItem("type"))
  
   useEffect(() => {
     getCategorie();
     getProduits();
     if (localStorage.getItem("type")==="Fournisseurs"){
       setIsDisabled(true);
+    }else{
+      setIsDisabled(false);
     }
-  }, []);
+    console.log('test use effect')
+  }, [localStorage.getItem("type")]);
 
 
   
@@ -137,6 +147,7 @@ export default function Produits(props) {
       const data = await response.json();
       if (response.ok) {
         setCatProd(data.data);
+       
       } else {
         console.log(data);
       }
@@ -186,8 +197,10 @@ export default function Produits(props) {
   return (
     <>
       <Header cartData={panierProduct} updatedPanierProduct={updatedPanierProduct}/>
+      <Grid container >
 
-      <Drawer
+        <Grid item xs={6} md={1}>
+ <Drawer
         anchor="left"
         variant="permanent"
         open={true}
@@ -224,8 +237,10 @@ export default function Produits(props) {
               <ListItemButton
                 onClick={() => {
                   setCatClicked(true);
-
+                  localStorage.setItem("catId",cat._id);
+                 
                   getCatProduct(cat._id);
+                 
                   setCatName(cat.name);
                 }}
                 sx={{
@@ -240,34 +255,49 @@ export default function Produits(props) {
           ))}
         </List>
       </Drawer>
+        </Grid>
+        <Grid item xs={6} md={11}>
       <Grid display={"flex"}>
         <Grid item>
-          <Box width={250}></Box>
+          <Box width={150}></Box>
         </Grid>
 
         <Grid item marginTop={10}>
           {catClicked ? (
             <>
               {" "}
-              <Grid container display={"flex"}>
-                <Grid item md={6}>
-          <Typography variant="h4">{catName}</Typography>
+              <Grid container display={"flex"} fullWidth>
+                <Grid item item xs={12} md={6} lg={6} >
+                  <Box display={"flex"} width={900}>
+                  <IconButton  onClick={()=>{setCatClicked(false)}} >
+                  <ArrowBack sx={{color:"black" , fontSize:"30px", marginBottom:"5px"}}/>
+                  </IconButton>
+               <Typography variant="h4" >{catName}</Typography></Box>
                 </Grid>
-                <Grid item md={6} display='flex' justifyContent={"end"}>
-                   <Link 
-                   
-                   underline="hover"
-                   color={"gray"}
-                   fontSize="30px"
-                   sx={{
+                <Grid item xs={12} md={6} lg={6} >
+                  {localStorage.getItem("type")==='Fournisseurs' ?(
                     
-                     ":hover": { color: "#F39200" },
-                   }}
-                   onClick={()=>{setCatClicked(false)}}> retour</Link>
-                </Grid>
+                     <Button 
+                    variant="contained"
+                          sx={{
+                            height:"50px",
+                            paddingLeft: "15px",
+                            paddingRight: "15px",
+                            borderRadius: "15px",
+                            backgroundColor: "#0049f2",
+                            margin:"0px 10px 10px 250px"
+                          }}
+                          
+                          onClick={()=>{handleOpen2()}}>
+                      Ajouter Produits 
+                      <AddBusinessRoundedIcon  sx={{ marginLeft: "10px", fontSize: "20px" }}/>
+                    </Button>
+                
+                  
+              ):(<></>)}
+              </Grid>
               </Grid>
               
-             
               <Box
                 marginBottom={5}
                 style={{ height: "2px", backgroundColor: "#F39200" }}
@@ -279,7 +309,7 @@ export default function Produits(props) {
                 display="flex"
               >
                 {catProd.map((prod) => (
-                  <Grid item>
+                  <Grid item xs={12} md={4} lg={3} >
                     <Card
                       sx={{ height: 300, width: 250, paddingBottom: 4 }}
                       key={prod._id}
@@ -367,28 +397,10 @@ export default function Produits(props) {
           ) : (
             <>
             <Grid container>
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <Typography variant="h4">Nouveaux Produits</Typography>
               </Grid>
-              <Grid item xs={12} md={6} lg={6} display="flex" justifyContent={"end"}>
-                  {localStorage.getItem("type")==='Fournisseurs' ?(
-                
-                     <Button 
-                    variant="contained"
-                          sx={{
-                            paddingLeft: "15px",
-                            paddingRight: "15px",
-                            borderRadius: "15px",
-                            backgroundColor: "#0049f2",
-                            margin:"0px 10px 10px 0px"
-                          }}>
-                      Ajouter Produits
-                      <AddBusinessRoundedIcon  sx={{ marginLeft: "10px", fontSize: "20px" }}/>
-                    </Button>
-                
-                  
-              ):(<></>)}
-              </Grid>
+             
             </Grid>
               
             
@@ -488,6 +500,8 @@ export default function Produits(props) {
             </>
           )}
         </Grid>
+      </Grid>
+      </Grid>
       </Grid>
       <Dialog open={open} onClose={handleClose} maxWidth="md">
         <Box display={"flex"}>
@@ -631,6 +645,27 @@ export default function Produits(props) {
           </Box>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={open2} onClose={handleClose2} maxWidth="md">
+      <Box display={"flex"}>
+          <DialogTitle>Ajouter Produit en {catName}</DialogTitle>
+          <DialogActions  sx={{ height: "20px" ,marginRight:0,marginLeft:40}}>
+            <IconButton>
+              <CancelRoundedIcon
+                onClick={() => {
+                  handleClose2();
+                }}
+              />
+            </IconButton>
+          </DialogActions>
+        </Box>
+        <Box mb={2} sx={{ height: "2px", backgroundColor: "#F39200" }}></Box>
+            <DialogContent>
+             <AddProduct/>
+            </DialogContent>
+         
+        </Dialog>
+
     </>
   );
 }

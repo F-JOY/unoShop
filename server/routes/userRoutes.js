@@ -37,7 +37,7 @@ router
   
 router
   .route("/:id")
-  .get(verifyToken, isAdmin, getUservalidator, getUser)
+  .get(verifyToken, getUservalidator, getUser)
   .put(verifyToken, isAdmin, updateUserValidator, updateUser)
   .delete(verifyToken, isAdmin, deleteUservalidator, deleteUser)
   .post(verifyToken,ajouterAdresse);
