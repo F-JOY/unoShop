@@ -69,7 +69,10 @@ export default function Produits(props) {
   useEffect(() => {
     getCategorie();
     getProduits();
-    if (localStorage.getItem("type") === "Fournisseurs") {
+    if (
+      localStorage.getItem("type") === "Fournisseurs" ||
+      localStorage.getItem("type") === "Admin"
+    ) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
@@ -264,7 +267,7 @@ export default function Produits(props) {
               {catClicked ? (
                 <>
                   {" "}
-                  <Grid container display={"flex"} fullWidth>
+                  <Grid container display={"flex"} spacing={4} fullWidth>
                     <Grid item item xs={12} md={6} lg={6}>
                       <Box display={"flex"} width={900}>
                         <IconButton
@@ -284,7 +287,7 @@ export default function Produits(props) {
                       </Box>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
-                      {localStorage.getItem("type") === "Fournisseurs" ? (
+                      {localStorage.getItem("type") === "Fournisseurs" || localStorage.getItem("type") === "Admin" ? (
                         <Button
                           variant="contained"
                           sx={{
@@ -311,18 +314,18 @@ export default function Produits(props) {
                   </Grid>
                   <Box
                     marginBottom={5}
-                    style={{ height: "2px", backgroundColor: "#F39200"}}
+                    style={{ height: "2px", backgroundColor: "#F39200" }}
                   ></Box>
                   <Grid
                     container
                     spacing={4}
-                    classes={{ paper: classes.drawerContainer }}
+                    //classes={{ paper: classes.drawerContainer }}
                     display="flex"
                   >
                     {catProd.map((prod) => (
-                      <Grid item xs={12} md={6} lg={3}>
+                      <Grid item xs={12} sm={6} md={6} lg={3}>
                         <Card
-                          sx={{ height: 300, width: 250, paddingBottom: 4 }}
+                          sx={{ height: 300, width: 250, paddingBottom: 4 ,}}
                           key={prod._id}
                         >
                           <CardMedia
@@ -356,39 +359,54 @@ export default function Produits(props) {
                             </Typography>
                           </CardContent>
                           <CardActions>
-                            <Button
-                              variant="contained"
-                              sx={{
-                                paddingLeft: "15px",
-                                paddingRight: "15px",
-                                borderRadius: "15px",
-                                backgroundColor: "#0049f2",
-                              }}
-                              disabled={isDisabled}
-                              onClick={() => {
-                                setPanierProduct([...panierProduct, prod]);
-                                setPanierProduct((prevPanier) =>
-                                  prevPanier.filter(
-                                    (obj, index, self) =>
-                                      index ===
-                                      self.findIndex((o) => o._id === obj._id)
-                                  )
-                                );
-                                setPanierProduct((prevPanier) =>
-                                  prevPanier.map((product) => {
-                                    if (product._id === prod._id) {
-                                      return { ...product, quantity: 1 };
-                                    }
-                                    return product;
-                                  })
-                                );
-                              }}
-                            >
-                              Ajouter
-                              <AddShoppingCartOutlinedIcon
-                                sx={{ marginLeft: "10px", fontSize: "20px" }}
-                              />
-                            </Button>
+                            {prod.quantite <= 0 ? (
+                              <Button
+                                sx={{
+                                  paddingLeft: "15px",
+                                  paddingRight: "15px",
+                                  borderRadius: "15px",
+                                  backgroundColor: "gray",
+                                }}
+                                disabled={true}
+                              >
+                                terminer
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  paddingLeft: "15px",
+                                  paddingRight: "15px",
+                                  borderRadius: "15px",
+                                  backgroundColor: "#0049f2",
+                                }}
+                                disabled={isDisabled}
+                                onClick={() => {
+                                  setPanierProduct([...panierProduct, prod]);
+                                  setPanierProduct((prevPanier) =>
+                                    prevPanier.filter(
+                                      (obj, index, self) =>
+                                        index ===
+                                        self.findIndex((o) => o._id === obj._id)
+                                    )
+                                  );
+                                  setPanierProduct((prevPanier) =>
+                                    prevPanier.map((product) => {
+                                      if (product._id === prod._id) {
+                                        return { ...product, quantity: 1 };
+                                      }
+                                      return product;
+                                    })
+                                  );
+                                }}
+                              >
+                                Ajouter
+                                <AddShoppingCartOutlinedIcon
+                                  sx={{ marginLeft: "10px", fontSize: "20px" }}
+                                />
+                              </Button>
+                            )}
+
                             <Box
                               display="flex"
                               justifyContent="end"
@@ -465,40 +483,55 @@ export default function Produits(props) {
                             </Typography>
                           </CardContent>
                           <CardActions>
-                            <Button
-                              variant="contained"
-                              sx={{
-                                paddingLeft: "15px",
-                                paddingRight: "15px",
-                                borderRadius: "15px",
-                                backgroundColor: "#0049f2",
-                              }}
-                              disabled={isDisabled}
-                              onClick={() => {
-                                console.log(isDisabled);
-                                setPanierProduct([...panierProduct, prod]);
-                                setPanierProduct((prevPanier) =>
-                                  prevPanier.filter(
-                                    (obj, index, self) =>
-                                      index ===
-                                      self.findIndex((o) => o._id === obj._id)
-                                  )
-                                );
-                                setPanierProduct((prevPanier) =>
-                                  prevPanier.map((product) => {
-                                    if (product._id === prod._id) {
-                                      return { ...product, quantity: 1 };
-                                    }
-                                    return product;
-                                  })
-                                );
-                              }}
-                            >
-                              Ajouter
-                              <AddShoppingCartOutlinedIcon
-                                sx={{ marginLeft: "10px", fontSize: "20px" }}
-                              />
-                            </Button>
+                            {prod.quantite <= 0 ? (
+                              <Button
+                                sx={{
+                                  paddingLeft: "15px",
+                                  paddingRight: "15px",
+                                  borderRadius: "15px",
+                                  backgroundColor: "gray",
+                                }}
+                                disabled={true}
+                              >
+                                terminer
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  paddingLeft: "15px",
+                                  paddingRight: "15px",
+                                  borderRadius: "15px",
+                                  backgroundColor: "#0049f2",
+                                }}
+                                disabled={isDisabled}
+                                onClick={() => {
+                                  console.log(isDisabled);
+                                  setPanierProduct([...panierProduct, prod]);
+                                  setPanierProduct((prevPanier) =>
+                                    prevPanier.filter(
+                                      (obj, index, self) =>
+                                        index ===
+                                        self.findIndex((o) => o._id === obj._id)
+                                    )
+                                  );
+                                  setPanierProduct((prevPanier) =>
+                                    prevPanier.map((product) => {
+                                      if (product._id === prod._id) {
+                                        return { ...product, quantity: 1 };
+                                      }
+                                      return product;
+                                    })
+                                  );
+                                }}
+                              >
+                                Ajouter
+                                <AddShoppingCartOutlinedIcon
+                                  sx={{ marginLeft: "10px", fontSize: "20px" }}
+                                />
+                              </Button>
+                            )}
+
                             <Box
                               display="flex"
                               justifyContent="end"
@@ -578,39 +611,55 @@ export default function Produits(props) {
                     <s> {prodDetaile.ancienprix} DA</s>
                   </Typography>
                   <Box display={"flex"} alignItems="baseline">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        paddingLeft: "15px",
-                        paddingRight: "15px",
-                        borderRadius: "15px",
-                        backgroundColor: "#0049f2",
-                      }}
-                      disabled={isDisabled}
-                      onClick={() => {
-                        setPanierProduct([...panierProduct, prodDetaile]);
-                        setPanierProduct((prevPanier) =>
-                          prevPanier.filter(
-                            (obj, index, self) =>
-                              index === self.findIndex((o) => o._id === obj._id)
-                          )
-                        );
-                        setPanierProduct((prevPanier) =>
-                          prevPanier.map((product) => {
-                            if (product._id === prodDetaile._id) {
-                              return { ...product, quantity: 1 };
-                            }
-                            return product;
-                          })
-                        );
-                        console.log(panierProduct);
-                      }}
-                    >
-                      Ajouter
-                      <AddShoppingCartOutlinedIcon
-                        sx={{ marginLeft: "10px", fontSize: "20px" }}
-                      />
-                    </Button>
+                    {prodDetaile.quantite <= 0 ? (
+                      <Button
+                        sx={{
+                          paddingLeft: "15px",
+                          paddingRight: "15px",
+                          borderRadius: "15px",
+                          backgroundColor: "gray",
+                        }}
+                        disabled={true}
+                      >
+                        terminer
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        sx={{
+                          paddingLeft: "15px",
+                          paddingRight: "15px",
+                          borderRadius: "15px",
+                          backgroundColor: "#0049f2",
+                        }}
+                        disabled={isDisabled}
+                        onClick={() => {
+                          setPanierProduct([...panierProduct, prodDetaile]);
+                          setPanierProduct((prevPanier) =>
+                            prevPanier.filter(
+                              (obj, index, self) =>
+                                index ===
+                                self.findIndex((o) => o._id === obj._id)
+                            )
+                          );
+                          setPanierProduct((prevPanier) =>
+                            prevPanier.map((product) => {
+                              if (product._id === prodDetaile._id) {
+                                return { ...product, quantity: 1 };
+                              }
+                              return product;
+                            })
+                          );
+                          console.log(panierProduct);
+                        }}
+                      >
+                        Ajouter
+                        <AddShoppingCartOutlinedIcon
+                          sx={{ marginLeft: "10px", fontSize: "20px" }}
+                        />
+                      </Button>
+                    )}
+
                     <Box
                       display="flex"
                       justifyContent="end"

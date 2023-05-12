@@ -142,7 +142,6 @@ export const AddProduct = () => {
             <InputLabel>Image Principale</InputLabel>
             <TextField
               type="file"
-              value=""
               fullWidth
               onChange={(e) => setImageCover(e.target.files[0])}
             />

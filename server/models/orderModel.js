@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema({
   ],
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true,
   },
   adresse: {
@@ -28,7 +28,8 @@ const orderSchema = new mongoose.Schema({
     type: String,
     enum: ["Valider", "Refuser"],
     default: "Refuser",
-  },
-});
+  }
+},
+{ timestamps: true });
 
 module.exports = mongoose.model("order", orderSchema);

@@ -17,6 +17,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ArrowDropDownSharpIcon from "@mui/icons-material/ArrowDropDownSharp";
 import ArrowDropUpSharpIcon from "@mui/icons-material/ArrowDropUpSharp";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { width } from "@mui/system";
 export const Panier = (props) => {
   const [products, setProducts] = useState(props.cartData);
@@ -24,6 +25,8 @@ export const Panier = (props) => {
   const [adresse, setAdresse] = useState([]);
   const [telephone, setTelephone] = useState("");
   const authToken = "Bearer " + localStorage.getItem("token");
+  const [orderPassed,setOrderPassed]=useState(false);
+  const [client ,setClient]=useState([]);
   //////////////////////incrementation de la quntity choisit du produit////////////////////////
 
   const incrementQuantity = (productId, qnt) => {
@@ -90,6 +93,7 @@ export const Panier = (props) => {
       if (response.ok) {
         console.log("user gotten");
         console.log(data);
+        setClient(data.data);
         setAdresse(data.data.adresse[0]);
         setTelephone(data.data.numtel);
       } else {
@@ -122,6 +126,9 @@ export const Panier = (props) => {
       const data = await response.json();
       if (response.ok) {
         console.log("Order successful");
+        setOrderPassed(true);
+        setProducts([])
+        props.updateCart([]);
         console.log(data);
       } else {
         console.log(data);
@@ -133,11 +140,25 @@ export const Panier = (props) => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      {products.length === 0 ? (
-        <Typography variant="h4" align="center">
+      {products.length === 0 && !orderPassed ? (
+        <Typography variant="h4" align="center" >
           Panier vide
         </Typography>
-      ) : (
+      ):( orderPassed ? (
+        <>
+        <Typography variant="h4">Commande enregistrer
+        </Typography>  
+      <CheckCircleIcon sx={{color:"green" ,marginLeft:"10px",marginTop:"20px",fontSize:"60px"}}/>
+        <Box sx={{marginRight:"440px",marginTop:"50px"}}>
+          <Typography variant="h6" align="left">Client : {client.nom}{client.prenom}</Typography>
+          <Typography variant="h6" align="left">Adresse :{adresse}</Typography>
+          <Typography  variant="h6" align="left">Telephone :{telephone}</Typography>
+        </Box>
+         </>
+      ):(
+      
+      
+
         <>
           {" "}
           <Grid container display="flex">
@@ -293,7 +314,7 @@ export const Panier = (props) => {
             ))}
           </Box>
         </>
-      )}
+      ))}
     </Box>
   );
 };

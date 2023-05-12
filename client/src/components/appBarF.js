@@ -147,6 +147,7 @@ const Header = (props) => {
     setIsConnected(false);
     handleCloseMenue();
     setType("");
+    history.push('/');
   };
 
   return (
@@ -232,8 +233,8 @@ const Header = (props) => {
                 justifyContent={"end"}
                 alignItems="center"
               >
-                {type !== "Fournisseurs" &&
-                localStorage.getItem("type") !== "Fournisseurs" ? (
+                {type === "Client" ||
+                localStorage.getItem("type") === "Client" ? (
                   <>
                     <IconButton onClick={() => handleButtonClick(<Favorit />)}>
                       <FavoriteBorderOutlinedIcon
@@ -259,10 +260,22 @@ const Header = (props) => {
                       </Badge>
                     </IconButton>
                   </>
-                ) : (
-                  <Typography variant="body2" color={"black"}>
-                    Fournisseurs
+                ) : (type === "Fournisseurs" ||
+                localStorage.getItem("type") === "Fournisseurs"?(
+                  <Typography variant="h6" color={"gray"}>
+                      {localStorage.getItem("type")}
                   </Typography>
+                ):(type === "Admin" ||
+                localStorage.getItem("type") === "Admin"?(
+                 <Typography variant="h6" color={"gray"}>
+                 {localStorage.getItem("type")}
+                </Typography>
+                ):(
+                    <></>
+                )
+                 
+                )
+                  
                 )}
 
                 {isConnected ? (

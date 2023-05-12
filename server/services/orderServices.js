@@ -66,14 +66,17 @@ exports.getOrders = asyncHandler(async (req, res) => {
       path: "orderItems",
       populate: {
         path: "product",
-        populate: { path: "fournisseur", select: "-_id nom prenom" },
+        populate: [
+          { path: "fournisseur", select: "nom prenom email numtel" },
+          { path: "categorie", select: "name" },
+        ],
       },
     })
+    .populate("user", "-_id nom prenom ")
     .skip(skip)
     .limit(limit);
   res.status(200).json({ result: orders.length, page, data: orders });
 });
-
 exports.changeOrderStatus = asyncHandler(async (req, res, next) => {
   const { orderid } = req.params;
   const status = req.body.status;
@@ -113,9 +116,62 @@ exports.getTotalPriceOrders = asyncHandler(async (req, res, next) => {
 });
 
 exports.getOrdersByUser = asyncHandler(async (req, res, next) => {
-  const orders = await orderModel.find({ user: req.user.id });
+  const orders = await orderModel
+    .find({ user: req.user.id })
+    .populate({
+      path: "orderItems",
+      populate: {
+        path: "product",
+        populate: [
+          { path: "fournisseur", select: "nom prenom email numtel adresse photodeprofil" },
+          { path: "categorie", select: "name" },
+        ],
+      },
+    })
+    .populate("user", "-_id nom prenom email numtel ");
   if (!orders) {
     res.status(200).json({ message: "vous avez effectue aucune commande" });
   }
   res.status(200).json({ orders: orders });
+});
+
+/*----------------------------- 
+**@desc Get les produit vendu d'un fournisseur (vous devez envoiyer le token avec la requette)
+**@Route GET api/v1/orders/orderfournisseur/
+**@Acces Private (Fournisseur)
+-----------------------------*/
+exports.getOrdersproductFournisseur = asyncHandler(async (req, res, next) => {
+  const fournisseurId = req.user.id;
+  console.log(fournisseurId);
+  const commandes = await orderModel
+    .find({
+      etat: "Valider",
+    })
+    .populate({
+      path: "orderItems",
+      populate: {
+        path: "product",
+        match: { fournisseur: fournisseurId },
+      },
+    });
+  console.log(commandes);
+  const produitsVendus = commandes.reduce((produits, commande) => {
+    const orderItems = commande.orderItems.filter(
+      (orderItem) => orderItem.product.fournisseur.toString() === fournisseurId
+    );
+
+    orderItems.forEach((orderItem) => {
+      produits.push({
+        commandeId: commande._id,
+        produit: orderItem.product,
+        quantite: orderItem.quantite,
+        prixTotal: orderItem.product.nouveauprix * orderItem.quantite,
+        date: commande.createdAt,
+      });
+    });
+
+    return produits;
+  }, []);
+  console.log(produitsVendus[0]);
+  res.json({ data: produitsVendus });
 });
