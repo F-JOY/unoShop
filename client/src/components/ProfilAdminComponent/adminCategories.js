@@ -231,12 +231,12 @@ const deleteCategorie = async () => {
           ) : (deletClicked?(
             <DialogContent>
                <Box display="bolck">
-              <Typography>supprimer :{catName}</Typography>
-              <Box display="flex">
-                <Button
+              <Typography variant="h6">supprimer :{catName}</Typography>
+              <Box display="flex" justifyContent="Right" marginTop={3}>
+                <Button  variant="contained" sx={{backgroundColor:"gray",marginRight:"10px"}}
                 onClick={()=>{handleClose()}}
                 >non</Button>
-                <Button 
+                <Button  variant="contained" sx={{backgroundColor:"#ff3a31",marginLeft:"10px"}} 
                  onClick={()=>{deleteCategorie()}}
                  >oui</Button>
               </Box>
