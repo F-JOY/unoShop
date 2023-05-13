@@ -18,7 +18,7 @@ export default function Footer() {
       <Box
         sx={{
           position: "relative",
-         
+           backgroundColor:"white",
           bottom: "-7px",
         
          

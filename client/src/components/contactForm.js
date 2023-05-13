@@ -24,14 +24,14 @@ export const ContactForm = () => {
 
   return (
 <>
-<Typography variant="h3" mb={3} align="center">Contactez nous</Typography>
+
 
  <Box
-        marginBottom={5}
+        marginBottom={1}
         style={{ height: "2px", backgroundColor: "#F39200" }}
       >
       </Box>
-
+<Typography variant="h3" mb={5} fontWeight={"bold"} align="center">Contactez nous</Typography>
     <Box sx={{display: "flex",
 
     flexDirection: "column",

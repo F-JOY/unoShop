@@ -70,7 +70,7 @@ exports.createProductValidator = [
     .withMessage("La quantité du produit doit être renseignée.")
     .isInt({ min: 0 })
     .withMessage("La quantité du produit doit être un entier positif."),
-  check("image").optional({ nullable: true }),
+  check("images").optional({ nullable: true }),
   validatorMiddleware,
 ];
 

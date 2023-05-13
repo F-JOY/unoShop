@@ -110,7 +110,7 @@ const Header = (props) => {
   ////////////////////////props id user et type user from login ////////////////
   const handleUserid = (id) => {
     setUser(id);
-    localStorage.setItem("id", id);
+    //localStorage.setItem("id", id);
   };
 
   function handleUserType(userType) {

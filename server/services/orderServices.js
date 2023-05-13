@@ -73,8 +73,7 @@ exports.getOrders = asyncHandler(async (req, res) => {
       },
     })
     .populate("user", "-_id nom prenom ")
-    .skip(skip)
-    .limit(limit);
+   
   res.status(200).json({ result: orders.length, page, data: orders });
 });
 exports.changeOrderStatus = asyncHandler(async (req, res, next) => {
@@ -141,7 +140,8 @@ exports.getOrdersByUser = asyncHandler(async (req, res, next) => {
 **@Acces Private (Fournisseur)
 -----------------------------*/
 exports.getOrdersproductFournisseur = asyncHandler(async (req, res, next) => {
-  const fournisseurId = req.user.id;
+ const fournisseurId = req.user.id;
+
   console.log(fournisseurId);
   const commandes = await orderModel
     .find({
@@ -154,7 +154,7 @@ exports.getOrdersproductFournisseur = asyncHandler(async (req, res, next) => {
         match: { fournisseur: fournisseurId },
       },
     });
-  console.log(commandes);
+  //console.log(commandes);
   const produitsVendus = commandes.reduce((produits, commande) => {
     const orderItems = commande.orderItems.filter(
       (orderItem) => orderItem.product.fournisseur.toString() === fournisseurId
@@ -172,6 +172,6 @@ exports.getOrdersproductFournisseur = asyncHandler(async (req, res, next) => {
 
     return produits;
   }, []);
-  console.log(produitsVendus[0]);
+  //console.log(produitsVendus[0]);
   res.json({ data: produitsVendus });
 });

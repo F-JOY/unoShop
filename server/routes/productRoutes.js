@@ -29,7 +29,7 @@ const router = express.Router();
 router
   .route("/")
   .post(
-    verifyToken,
+   verifyToken,
     isForA,
     uploadProductImages,
     resizeProductImages,

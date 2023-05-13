@@ -123,15 +123,42 @@ const setOrderStatus = async (id) => {
               <TableCell >{order.telephone}</TableCell>
               <TableCell>
                 {order.orderItems.map((item,key)=>(
-                    <Table>
+                    <Table key={key}>
                         <TableBody>
                             <TableCell align="center">
-                                <Box display={"flex"}>
-                                <img src={"http://localhost:3001/products/" +  item.product.imageCover } alt=""  width="40"/>
-                                <Typography variant="h6" pl={2} pt={1}>{item.quantite}</Typography>
+                            <Box display={"flex"}>
+                             
+                                
                                 <Box display={"block"} paddingLeft={2}>
+                                <Box display={"flex"}>
+                                  {item.product ? (
+                                      <> 
+                                      {item.product.imageCover !=null ?(
+                                      <img src={"http://localhost:3001/products/" + item.product.imageCover} alt=""  width="40"/>
+                                  ):(
+                                        <>  </>
+                                  )}
+                                   <Typography variant="h6" pl={2} pt={1}>{item.quantite}</Typography>
+                                {item.product.name && item.product.fournisseur && item.product.nouveauprix?(
+                                      <Box display={"block"} paddingLeft={2}>
                                     <Typography align="center"> {item.product.name} {" prix: "} {item.product.nouveauprix}DA</Typography>
                                     <Typography>De :{item.product.fournisseur.nom}{"  "}{item.product.fournisseur.prenom}</Typography>
+                                </Box>
+                                  ):(
+                                        <>
+                                        <Typography>Undifiend</Typography>
+                                        </>
+                                  )}
+                                      </>
+                                  ):(
+                                    <></>
+                                  )}
+                                 
+                               
+                               
+                                
+                                </Box>
+                                 
                                 </Box>
                                 
                                 </Box>

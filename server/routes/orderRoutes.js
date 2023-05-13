@@ -22,4 +22,5 @@ router
   .get(getOrders);
 router.route("/:orderid").put(verifyToken,isAdmin,changeEtatOrderValidator, changeOrderStatus);
 router.route("/orderfournisseur").get(verifyToken, getOrdersproductFournisseur);
+
 module.exports = router;

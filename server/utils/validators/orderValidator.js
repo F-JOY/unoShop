@@ -15,3 +15,10 @@ exports.changeEtatOrderValidator = [
   check("status").notEmpty().withMessage("veuillez saisir le chammps status"),
   validatorMiddleware,
 ];
+exports.orderByFournisseurs = [
+  check("idfourni")
+    .notEmpty()
+    .withMessage("Le ID fournisseur  doit être renseigné.")
+    .isMongoId()
+    .withMessage("Le ID fournisseur  doit être une référence MongoDB valide."),
+];

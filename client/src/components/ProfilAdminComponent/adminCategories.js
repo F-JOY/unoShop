@@ -19,8 +19,9 @@ const handleOpen = () => {
 };
 
 const handleClose = () => {
-  setCateName('')
-  setModifyClicked(false)
+  setCateName('');
+  setModifyClicked(false);
+  setDeletClicked(false);
   setOpen(false);
 };
 
@@ -204,12 +205,12 @@ const deleteCategorie = async () => {
             <DialogContent >
              <Box display="flex" justifyContent="right" alignItems="end">
                 <Box display="block">   
-                 <Typography>Modifier categorie</Typography>
+                 <Typography variant="h4" mb={3}>Modifier categorie</Typography>
                 <TextField
                 label="Name"
                 value={catName}
           
-               sx={{m:"2px",mr:"10px",}}
+               sx={{mr:"10px",}}
                   onChange={(e) => setCateName(e.target.value)}
                 />
                   </Box>
@@ -231,7 +232,9 @@ const deleteCategorie = async () => {
           ) : (deletClicked?(
             <DialogContent>
                <Box display="bolck">
-              <Typography variant="h6">supprimer :{catName}</Typography>
+              <Typography variant="body1">voullez vous vriment supprimer cette categorie
+              {catName}</Typography>
+              <Typography variant="h6" align="center" fontWeight={"bold"} color={""}>{catName}</Typography>
               <Box display="flex" justifyContent="Right" marginTop={3}>
                 <Button  variant="contained" sx={{backgroundColor:"gray",marginRight:"10px"}}
                 onClick={()=>{handleClose()}}

@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Alert,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -65,6 +66,11 @@ export default function Produits(props) {
   const [type, setType] = useState(localStorage.getItem("type"));
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [ajoutTerminer,setAjouotTerminer]=useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+
+
 
   useEffect(() => {
     getCategorie();
@@ -77,11 +83,26 @@ export default function Produits(props) {
     } else {
       setIsDisabled(false);
     }
-  }, [localStorage.getItem("type")]);
+
+
+  }, [shouldUpdate]);
   ////////////////////props handler//////////////////////
   const updatedPanierProduct = (newCartData) => {
     setPanierProduct(newCartData);
   };
+  const addedProduct = (bienAjouter) => {
+    if(bienAjouter===true){
+      setAjouotTerminer(true);
+      setShouldUpdate(true)
+      handleClose2();
+      setShowAlert(true);
+  setTimeout(() => {
+    setShowAlert(false);
+  }, 5000);
+    }
+     
+  }
+
   //////////////////////dialogue ditail produit open close functions////////////////////////
   const handleOpen = () => {
     setOpen(true);
@@ -201,6 +222,7 @@ export default function Produits(props) {
         cartData={panierProduct}
         updatedPanierProduct={updatedPanierProduct}
       />
+     
       <Grid container>
         <Grid item xs={6} md={1}>
           <Drawer
@@ -284,6 +306,11 @@ export default function Produits(props) {
                           />
                         </IconButton>
                         <Typography variant="h4">{catName}</Typography>
+                        {showAlert && (
+        <Box display="flex" justifyContent="center" mt={2}>
+          <Alert variant="filled" severity="success">Produit Ajouter actualiser pour voir!</Alert>
+        </Box>
+      )}
                       </Box>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
@@ -296,7 +323,7 @@ export default function Produits(props) {
                             paddingRight: "15px",
                             borderRadius: "15px",
                             backgroundColor: "#0049f2",
-                            margin: "0px 10px 10px 250px",
+                            margin: "0px 10px 20px 250px",
                           }}
                           onClick={() => {
                             handleOpen2();
@@ -312,10 +339,7 @@ export default function Produits(props) {
                       )}
                     </Grid>
                   </Grid>
-                  <Box
-                    marginBottom={5}
-                    style={{ height: "2px", backgroundColor: "#F39200" }}
-                  ></Box>
+                 
                   <Grid
                     container
                     spacing={4}
@@ -325,7 +349,7 @@ export default function Produits(props) {
                     {catProd.map((prod) => (
                       <Grid item xs={12} sm={6} md={6} lg={3}>
                         <Card
-                          sx={{ height: 300, width: 250, paddingBottom: 4 ,}}
+                          sx={{ height: 300, width: 250, paddingBottom: 5 ,}}
                           key={prod._id}
                         >
                           <CardMedia
@@ -348,15 +372,30 @@ export default function Produits(props) {
                               variant="h6"
                               fontSize={17}
                               component="div"
+                              align="center"
+                              fontSize="23px"
                             >
                               {prod.name}
                             </Typography>
-                            <Typography variant="body1" color="text.secondary">
+                          <Typography variant="h6" align="center"  sx={{
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom:15,
+                   
+                    width: '80px',
+                    height: '2px',
+                    backgroundColor: 'red',
+                  },
+                }}>
+                            {prod.ancienprix} DA
+                            </Typography>
+
+                            <Typography variant="h6" align="center" color="#0049F2">
                               {prod.nouveauprix} DA
                             </Typography>
-                            <Typography variant="body1" color="text.secondary">
-                              <s> {prod.ancienprix} DA</s>
-                            </Typography>
+                            
                           </CardContent>
                           <CardActions>
                             {prod.quantite <= 0 ? (
@@ -430,17 +469,21 @@ export default function Produits(props) {
                 </>
               ) : (
                 <>
-                  <Grid container>
+                  <Grid container display={"block"}>
                     <Grid item xs={12} md={6}>
-                      <Typography variant="h4">Nouveaux Produits</Typography>
-                    </Grid>
-                  </Grid>
-
-                  <Box
-                    marginBottom={5}
-                    style={{ height: "2px", backgroundColor: "#F39200" }}
-                  ></Box>
-                  <Grid
+                      <Typography variant="h4" >Nouveaux </Typography>
+                      </Grid>
+                      {localStorage.getItem("type") === "Fournisseurs" || localStorage.getItem("type") === "Admin" ?(
+                       <>
+                       <Grid item xs={12} md={6} sm={6}>
+                          <Typography variant="body1" mb="20px"  align="left">selctioner une categorie pour Ajouter </Typography>
+                        </Grid>
+                      </>
+                      ):(
+                        <></>
+                      )}
+                   </Grid>
+                    <Grid
                     container
                     spacing={4}
                     classes={{ paper: classes.drawerContainer }}
@@ -449,7 +492,7 @@ export default function Produits(props) {
                     {produit.map((prod) => (
                       <Grid item xs={12} sm={6} md={3}>
                         <Card
-                          sx={{ height: 300, width: 250, paddingBottom: 4 }}
+                          sx={{ height: 300, width: 250, paddingBottom: 5 }}
                           key={prod._id}
                         >
                           <CardMedia
@@ -468,19 +511,32 @@ export default function Produits(props) {
                             }}
                           >
                             <Typography
+                            align="center"
                               gutterBottom
                               variant="h6"
-                              fontSize={17}
+                              fontSize="23px"
                               component="div"
                             >
                               {prod.name}
                             </Typography>
-                            <Typography variant="body1" color="text.secondary">
+                              <Typography variant="h6"
+                               sx={{
+                                position: 'relative',
+                                '&::before': {
+                                  content: '""',
+                                  position: 'absolute',
+                                  bottom:15,   
+                                  width: '80px',
+                                  height: '2px',
+                                  backgroundColor: 'red',
+                                },
+                              }} align="center" color="text.secondary">
+                            {prod.ancienprix} DA
+                            </Typography>
+                            <Typography variant="h6" align="center" color="#0049f2">
                               {prod.nouveauprix} DA
                             </Typography>
-                            <Typography variant="body1" color="text.secondary">
-                              <s>{prod.ancienprix} DA</s>
-                            </Typography>
+                          
                           </CardContent>
                           <CardActions>
                             {prod.quantite <= 0 ? (
@@ -568,10 +624,11 @@ export default function Produits(props) {
             </IconButton>
           </DialogActions>
         </Box>
+        <Box sx={{ height: "3px", backgroundColor: "#F39200" }}></Box>
         <DialogContent sx={{ width: "700px", height: "700px" }}>
           <Box display={"block"}>
             <Grid container display={"flex"}>
-              <Grid item md={6} display="inline-block">
+              <Grid item md={6} xs={6} sm={6} display="inline-block">
                 <Box display="flex">
                   <img
                     src={"http://localhost:3001/products/" + imageCover}
@@ -598,19 +655,37 @@ export default function Produits(props) {
                   ))}
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box display={"block"}>
+              <Grid item md={6} xs={6} sm={6}>
+                <Box display={"block"} pl={1}>
                   <Typography variant="h3">{prodDetaile.name}</Typography>
-                  <Typography variant="body2">
+            
+                  <Typography variant="body2" fontWeight="bold">
                     {prodDetaile.description}
                   </Typography>
-                  <Typography variant="h6" marginTop={"3px"}>
+                  <Box display={"block"} m={1}>
+                  
+                  <Typography variant="h6" 
+                   sx={{
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom:15,
+                   
+                    width: '80px',
+                    height: '2px',
+                    backgroundColor: 'red',
+                  },
+                }}>
+                   {prodDetaile.ancienprix} DA
+                  </Typography>
+                 <Typography variant="h6" fontWeight="bold"  color="#0049F2">
                     {prodDetaile.nouveauprix} DA
                   </Typography>
-                  <Typography variant="h6">
-                    <s> {prodDetaile.ancienprix} DA</s>
-                  </Typography>
-                  <Box display={"flex"} alignItems="baseline">
+
+                  </Box>
+                 
+                  <Box display={"flex"} justifyContent="left" alignContent={"left"} alignItems={"left"} pt={4}>
                     {prodDetaile.quantite <= 0 ? (
                       <Button
                         sx={{
@@ -627,6 +702,8 @@ export default function Produits(props) {
                       <Button
                         variant="contained"
                         sx={{
+                          height:"40px",
+                          width:"150px",
                           paddingLeft: "15px",
                           paddingRight: "15px",
                           borderRadius: "15px",
@@ -663,7 +740,7 @@ export default function Produits(props) {
                     <Box
                       display="flex"
                       justifyContent="end"
-                      sx={{ marginLeft: 2 }}
+                      sx={{ marginLeft: 4 }}
                     >
                       <IconButton>
                         <FontAwesomeIcon
@@ -735,7 +812,7 @@ export default function Produits(props) {
         </Box>
         <Box mb={2} sx={{ height: "2px", backgroundColor: "#F39200" }}></Box>
         <DialogContent>
-          <AddProduct />
+          <AddProduct envoyerAcat={addedProduct}/>
         </DialogContent>
       </Dialog>
     </>

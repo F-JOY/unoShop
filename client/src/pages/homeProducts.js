@@ -26,7 +26,7 @@ import IconButton from "@mui/material/IconButton";
 import { InputBase } from "@mui/material";
 import { faHeartCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -48,7 +48,7 @@ export default function HomeProducts(props) {
 
   const [formattedDate, setFormatedDate] = useState();
   const [images, setImages] = useState([]);
-
+  const history = useHistory();
   useEffect(() => {
     getProduits();
   }, []);
@@ -76,11 +76,12 @@ export default function HomeProducts(props) {
 
   return (
     <>
-      <Typography variant="h3" align="center" mb={3}>Nouveaux Produits</Typography>
+    
       <Box
-        marginBottom={5}
+        marginBottom={1}
         style={{ height: "2px", backgroundColor: "#F39200" }}
       ></Box>
+      <Typography variant="h3" align="center" mb={4} fontWeight={"bold"}>Nouveaux Produits</Typography>
       <Grid
         container
         spacing={4}
@@ -103,12 +104,14 @@ export default function HomeProducts(props) {
                     height: 30,
                     position: "absolute",
                     top: "15px",
-                    right: 230,
+                    right: 220,
+              
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     "& .MuiBadge-badge": {
-                        fontSize: "1rem",
+                        fontSize: "25px",
+                        fontWeight:"bold"
                       },
                   }}
                   badgeContent="New"
@@ -120,15 +123,19 @@ export default function HomeProducts(props) {
                 />
               </Box>
               <CardContent>
-                <Typography
+                <Typography 
+                align="center"
                   gutterBottom
                   variant="h6"
-                  fontSize={17}
+                  fontSize="23px"
                   component="div"
                 >
                   {prod.name}
                 </Typography>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="h6" color="#0049F2"
+                align="center"
+               
+                >
                   {prod.nouveauprix} DA
                 </Typography>
               </CardContent>
@@ -136,6 +143,23 @@ export default function HomeProducts(props) {
           </Grid>
         ))}
       </Grid>
+      <Box display={"flex"} justifyContent="center">
+      <Link
+                    variant="button"
+                    underline="always"
+                    fontSize="20px"
+                    sx={{
+                      
+                      paddingLeft: 3,
+                      paddingRight: 3,
+                      paddingTop: 2,
+                      ":hover": { color: "#F39200" },
+                    }}
+                    onClick={() => history.push("/produits")}
+                  >
+                  Voir Plus
+                  </Link>
+      </Box>
     </>
   );
 }
