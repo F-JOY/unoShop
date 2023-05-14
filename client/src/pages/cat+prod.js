@@ -96,6 +96,7 @@ export default function Produits(props) {
       setShouldUpdate(true)
       handleClose2();
       setShowAlert(true);
+      setCatClicked(false);
   setTimeout(() => {
     setShowAlert(false);
   }, 5000);
@@ -306,11 +307,7 @@ export default function Produits(props) {
                           />
                         </IconButton>
                         <Typography variant="h4">{catName}</Typography>
-                        {showAlert && (
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Alert variant="filled" severity="success">Produit Ajouter actualiser pour voir!</Alert>
-        </Box>
-      )}
+                      
                       </Box>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
@@ -470,12 +467,22 @@ export default function Produits(props) {
               ) : (
                 <>
                   <Grid container display={"block"}>
-                    <Grid item xs={12} md={6}>
-                      <Typography variant="h4" >Nouveaux </Typography>
+                    <Grid item xs={12} md={12} display={"flex"}>
+                      <Grid item xs={6} md={6} sm={6}>
+                         <Typography variant="h4" >Nouveaux </Typography>
+                      </Grid>
+                      <Grid item xs={6} md={6} sm={6} display="flex" justifyContent={"center"}>
+                       {showAlert && (
+                    <Box display="flex" justifyContent="right">
+                     <Alert variant="filled" severity="success">Produit Ajouter avec succes</Alert>
+                      </Box>
+                      )}
+                      </Grid>
+                     
                       </Grid>
                       {localStorage.getItem("type") === "Fournisseurs" || localStorage.getItem("type") === "Admin" ?(
                        <>
-                       <Grid item xs={12} md={6} sm={6}>
+                       <Grid item xs={12} md={12} sm={12}>
                           <Typography variant="body1" mb="20px"  align="left">selctioner une categorie pour Ajouter </Typography>
                         </Grid>
                       </>

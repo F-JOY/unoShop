@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { Grid, Typography,Box, TextField,InputLabel, Button, Table,IconButton,DialogContent,Dialog,DialogActions, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Drawer, } from "@mui/material";
-export const AdminProduit=()=>{
+export const FournisProduit=()=>{
 const [product,setProduct]=useState([]) ;
 const [prodName,setProdName]=useState("");
 const [prodId,setProdId]=useState("");
@@ -162,3 +162,7 @@ const dateChanger = (createDate) => {
    </>
     );
 }
+
+
+
+

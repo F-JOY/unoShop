@@ -110,7 +110,7 @@ const Header = (props) => {
   ////////////////////////props id user et type user from login ////////////////
   const handleUserid = (id) => {
     setUser(id);
-    //localStorage.setItem("id", id);
+    localStorage.setItem("id", id);
   };
 
   function handleUserType(userType) {
@@ -236,7 +236,7 @@ const Header = (props) => {
                 {type === "Client" ||
                 localStorage.getItem("type") === "Client" ? (
                   <>
-                    <IconButton onClick={() => handleButtonClick(<Favorit />)}>
+                    <IconButton onClick={() => {history.push("/ProfilClient");}}>
                       <FavoriteBorderOutlinedIcon
                         sx={{ color: "black", fontSize: "30px" }}
                       />
@@ -440,7 +440,9 @@ const Header = (props) => {
                       <SearchIcon sx={{ borderLeft: "solid 1px" }} />
                     </IconButton>
                   </Box>
-                  <IconButton>
+                  <IconButton
+                  
+                  >
                     <FavoriteBorderOutlinedIcon
                       sx={{ color: "black", fontSize: "20px" }}
                     />

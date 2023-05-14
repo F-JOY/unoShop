@@ -60,7 +60,7 @@ export const Achat = () => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ borderBottom:"solid" ,borderBottomWidth:"2px",borderBottomColor:"#F39200" }}>
               <TableCell sx={{ fontSize: "25px" }} align="center">
                 Produits
               </TableCell>

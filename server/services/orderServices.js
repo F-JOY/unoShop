@@ -153,7 +153,8 @@ exports.getOrdersproductFournisseur = asyncHandler(async (req, res, next) => {
         path: "product",
         match: { fournisseur: fournisseurId },
       },
-    });
+    })
+    .populate("user","_id nom prenom numtel email adresse photodeprofil");
   //console.log(commandes);
   const produitsVendus = commandes.reduce((produits, commande) => {
     const orderItems = commande.orderItems.filter(
@@ -167,6 +168,7 @@ exports.getOrdersproductFournisseur = asyncHandler(async (req, res, next) => {
         quantite: orderItem.quantite,
         prixTotal: orderItem.product.nouveauprix * orderItem.quantite,
         date: commande.createdAt,
+        client:commande.user,
       });
     });
 
