@@ -4,10 +4,10 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import AddIcon from '@mui/icons-material/Add';
 export const AdminCategoies=()=>{
     const [categories,setCategories]=useState([]);
-    const [shouldUpdate, setShouldUpdate] = useState(false);
+    const [shouldUpdate, setShouldUpdate] = useState(false);////pour le useEffect s'exute a chaque changement 
     const [catName,setCateName]=useState("");
-    const [modifyClicked,setModifyClicked]=useState(false);
-    const [deletClicked,setDeletClicked]=useState(false);
+    const [modifyClicked,setModifyClicked]=useState(false);//si true dialogue modification
+    const [deletClicked,setDeletClicked]=useState(false);//si true dialogue supprission
     const [catId,setCatId]=useState('');
     const [open, setOpen] = useState(false);
 useEffect(()=>{
@@ -25,7 +25,7 @@ const handleClose = () => {
   setOpen(false);
 };
 
-/////////////////recuperation des categories///////////////////////////
+/////////////////http req recuperation des categories///////////////////////////
     const getCategories = async () => {
         try {
           const response = await fetch("http://localhost:3001/api/v1/categories", {
@@ -55,7 +55,7 @@ const handleClose = () => {
     };
     return date.toLocaleDateString("en-US", options);
   };
-  ////////////////////////////Ajouter categorie/////////////////////////////////////////
+  ////////////////////////////http req Ajouter categorie/////////////////////////////////////////
   const createCategorie = async () => {
     const authToken = "Bearer " + localStorage.getItem("token");
     try {
@@ -81,7 +81,7 @@ const handleClose = () => {
       console.error(error);
     }
   }; 
-//////////////////////////////////Modifier Categorie/////////////////////////
+//////////////////////////////////http req Modifier Categorie/////////////////////////
 const updateCategorie = async () => {
   const authToken = "Bearer " + localStorage.getItem("token");
   try {
@@ -108,7 +108,7 @@ const updateCategorie = async () => {
     console.error(error);
   }
 }; 
-//////////////////////////////delete categorie/////////////////////
+////////////////////////////// http req delete categorie/////////////////////
 const deleteCategorie = async () => {
   const authToken = "Bearer " + localStorage.getItem("token");
   try {

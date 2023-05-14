@@ -18,17 +18,15 @@ import { MexFournisseur } from "../components/profilClientComponent/fournisseur"
 import { ClientProfil } from "../components/profilClientComponent/ClientProfil";
 import { ClientFavoris } from "../components/profilClientComponent/ClientFavorie";
 export const ProfilClient = () => {
+
+  /////////////variable de gestion d'affichage des components///////
   const [clickProfil, setClickProfil] = useState(true);
   const [clickAchat, setClickAchat] = useState(false);
   const [clickFavorie, setClickFavorie] = useState(false);
   const [clickFornis, setClickFornis] = useState(false);
   const [fournisseurs,setFrounisseur]=useState([]);
-  const [orders,setOrders]=useState([]);
-  const[orderItems,setOrderItems]=useState([]);
- 
+  
 
- 
- 
   return (
     <>
       <Header cartData={[]} />

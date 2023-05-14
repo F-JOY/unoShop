@@ -15,6 +15,8 @@ import { AdminCommande } from "../components/ProfilAdminComponent/adminCommand";
 import { AdminCategoies } from "../components/ProfilAdminComponent/adminCategories";
 import { AdminVente } from "../components/ProfilAdminComponent/adminvente";
  export const ProfilAdmin =()=>{
+
+  ///////////variable de gestion de rendrement des components//////////////////
 const [clickClient,setClickClient]=useState(true)
 const [clickFournis,setClickFournis]=useState(false)
 const [clickProduit,setClickProduit]=useState(false)

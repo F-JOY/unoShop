@@ -29,8 +29,7 @@ export const MexFournisseur = () => {
         console.log(data);
         setOrders(data.orders);
         getUserFournisseur(data.orders);
-        /*     const orderItems = data.orders.map(order => order.orderItems);
-        setOrderItems(prevOrderItems => [...prevOrderItems, ...orderItems]);*/
+        
       } else {
         console.log(data);
       }
@@ -38,7 +37,7 @@ export const MexFournisseur = () => {
       console.error(error);
     }
   };
-  ///////////////////////recuperer les fournisseurs////////////////////
+  ///////////////////////recuperer les fournisseurs apartire de orders////////////////////
   const getUserFournisseur = (orders) => {
     const fournisseurs = [];
 

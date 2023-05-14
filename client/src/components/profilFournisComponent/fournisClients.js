@@ -11,7 +11,7 @@ useEffect(() => {
         getVente();
        
       }, []);
-////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////req1 recuperer les vents d'un fournisseur donnée///////////////////////////////////////////////////
       const getVente = async () => { 
         const authToken = "Bearer " + localStorage.getItem("token");
         
@@ -40,7 +40,7 @@ useEffect(() => {
             console.error(error);
           }
     }
-///////////////////////////////recuperer les clients/////////////////////////////////////////////////////
+///////////////////////////////recuperer les clients des ventes recu de req1 et calculer les doublant pour recuperer le nomre de vent pour chaque client/////////////////////////////////////////////////////
 const getVenteClient = async (orders) => {
     const client = orders.reduce((acc, order) => {
       const existingClient = acc.find(client => client._id === order.client._id);

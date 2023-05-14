@@ -24,30 +24,32 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 export const ClientFavoris = () => {
-  const [favoris, setFavoris] = useState([]);
-  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const [favoris, setFavoris] = useState([]);//la liste des favories requpere
+  const [shouldUpdate, setShouldUpdate] = useState(false);//pour useEffect
   const [favId, setFavId] = useState();
   const [favProd, setFavProd] = useState();
   const [open, setOpen] = useState(false);
-  const [AddClicked, setAddClicked] = useState(false);
-  const [deletClicked, setDeletClicked] = useState(false);
-  const [orderItem, setorderItem] = useState([]);
-  const [produit, setProduit] = useState();
+  const [AddClicked, setAddClicked] = useState(false);//si  true afficher dialogue Acheter
+  const [deletClicked, setDeletClicked] = useState(false);// si tue afficher confirmation de suppression de favorie
+  const [orderItem, setorderItem] = useState([]);// l'array qui va contenire le produit et la qnt choisit
+  const [produit, setProduit] = useState();///le produit favorie
   const [adresse, setAdresse] = useState([]);
   const [telephone, setTelephone] = useState("");
-  const [qnt,setQnt]=useState(1);
+  const [qntMax,setQntMax]=useState(1);//quantite totale du produit
+  const [qnt,setQnt]=useState(1);// quantite de produit saisit par le client
   useEffect(() => {
     getAllFavoris();
     getUserById();
-  }, [shouldUpdate]);
+  }, [shouldUpdate]);////s'executer si il ya un changement de shouldUpdate
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setQnt(1);setQntMax(1);
   };
-  //////////////////////////recupiration des favories////////////////////////
+  //////////////////////////http req recupiration des favories////////////////////////
   const getAllFavoris = async () => {
     try {
       const authToken = "Bearer " + localStorage.getItem("token");
@@ -67,7 +69,7 @@ export const ClientFavoris = () => {
       console.error(error);
     }
   };
-  /////////////////////////////////delete favorie///////////////////////////////////////////
+  /////////////////////////////////http req delete favorie///////////////////////////////////////////
   const deleteFavoris = async () => {
     try {
       const authToken = "Bearer " + localStorage.getItem("token");
@@ -89,7 +91,7 @@ export const ClientFavoris = () => {
   };
 
   
-  //////////////////////info client//////////////////////////////////////////////
+  //////////////////////info client pour passer la requette creation de la commande//////////////////////////////////////////////
   const getUserById = async () => {
 
 
@@ -118,7 +120,7 @@ export const ClientFavoris = () => {
     }
   };
 
-  //////////////////////Acheter///////////////////////////////////////////////////
+  //////////////////////http req : passer commande (Acheter le produit favorie)///////////////////////////////////////////////////
   const Acheter = async () => {
    
       const orderItems = [{ product: produit._id, quantite: qnt }]
@@ -213,9 +215,10 @@ export const ClientFavoris = () => {
                       fontSize: "10px",
                     }}
                     onClick={() => {
-                        setFavId(fav._id);
+                      setFavId(fav._id);
                       handleOpen();
-                      setAddClicked(true)
+                      setAddClicked(true);
+                      setQntMax(fav.product.quantite);
                       setProduit(fav.product);
                     }}
                   >
@@ -301,7 +304,7 @@ export const ClientFavoris = () => {
                           width: "30px",
                           borderRadius: "50%",
                         }}
-                        onClick={() => {setQnt(qnt+1)}
+                        onClick={() => {if(qnt<=qntMax){setQnt(qnt+1)}}
                           
                         }
                       >

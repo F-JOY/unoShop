@@ -170,6 +170,8 @@ export default function FormInscription(props) {
   const numnif = numeronif;
   const numrc = numerorc;
  //const photo =photodeprofil.name
+ /////////////////requete d'inscription multipart body envoyer dans form data////////////////
+ ////////////////////////////////// l'inscrption d'un fournisseur car form data est different du celle du client////////////////////////////////////////////////////////
   const handleSubmitFour = async (event) => {
     event.preventDefault();
     try {
@@ -211,7 +213,7 @@ export default function FormInscription(props) {
     }
   };
 
-  
+////////////////////////////////http req pour inscription client ou affilier////////////////////////////  
   const handleSubmit = async (event) => {
     
     event.preventDefault();

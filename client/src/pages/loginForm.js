@@ -20,7 +20,7 @@ export const Login = (props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   //String state;
-
+///////////////////////requette de connexion et stockage de donne dan local storage////////
   const handleSubmit = async (event) => {
     
     event.preventDefault();

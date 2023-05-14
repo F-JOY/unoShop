@@ -35,8 +35,7 @@ export const Achat = () => {
         console.log("orders seccusfuly gotten");
         console.log(data);
         setOrders(data.orders);
-        /*     const orderItems = data.orders.map(order => order.orderItems);
-      setOrderItems(prevOrderItems => [...prevOrderItems, ...orderItems]);*/
+       
       } else {
         console.log(data);
       }
@@ -44,7 +43,7 @@ export const Achat = () => {
       console.error(error);
     }
   };
-  ////////////////////Modifier La date de creation de la commande//////////////////////////
+  ////////////////////traitement d'affichage de La date de creation de la commande//////////////////////////
   const dateChanger = (createDate) => {
     const date = new Date(createDate);
     const options = {

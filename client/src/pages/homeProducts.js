@@ -52,7 +52,8 @@ export default function HomeProducts(props) {
   useEffect(() => {
     getProduits();
   }, []);
-
+  //////get Nouveax produit///////////////////
+/////////////////////requperer le produit et inverser le liste obtenue et recuperer les 10 dernier Ajouter///////
   const getProduits = async () => {
     try {
       const response = await fetch("http://localhost:3001/api/v1/products", {

@@ -10,9 +10,9 @@ const [shouldUpdate, setShouldUpdate] = useState(false);
 const [deletClicked,setDeletClicked]=useState(false);
 useEffect(()=>{
     getUserProduct();
-},[shouldUpdate])
+},[shouldUpdate])//executer si un changement des produits lors de la suppression
 
-///////////////////////////dialogue ///////////////////////////
+///////////////////////////dialogue de suppression ///////////////////////////
 const handleOpen = () => {
   setOpen(true);
 };

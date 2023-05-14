@@ -10,7 +10,7 @@ import { Grid, Typography, Box, Container, Link, Button } from "@mui/material";
 import { padding, shadows } from "@mui/system";
 import { createElement } from "react";
 import { fontGrid } from "@mui/material/styles/cssUtils";
-
+////////////////////just designe no functions here/////////////////
 export default function Footer() {
   return (
     <footer>

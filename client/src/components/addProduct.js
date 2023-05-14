@@ -65,7 +65,7 @@ const validateForm = () => {
 };
 
 
-/////////////////recuperation des images//////////////////////////////////
+/////////////////recuperation des images discriptives dans images[]//////////////////////////////////
   const handleFileChange = (index, event) => {
     const newImages = [...images];
     newImages[index] = event.target.files[0];
@@ -83,7 +83,7 @@ const validateForm = () => {
   ));
   
 
-
+///////////////////////////////////requet http Ajoter produit////////////////////////////////////////////////////////
   async function handleaddProduct() {
     
  const url = "http://localhost:3001/api/v1/products";
@@ -112,10 +112,10 @@ const validateForm = () => {
       const data = await response.json();
       if (response.ok) {
         console.log("produit Ajouter");
-       setbienAjouter(true);
-       props.envoyerAcat(true);
+       
+       props.envoyerAcat(true);/// data to cat and product to show alert
       } else {
-        
+        setIsFormValid(false)
         console.log("creation échouée");
         console.log(data);
         

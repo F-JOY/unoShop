@@ -3,6 +3,8 @@ import React from "react";
 import serviceAchat from "../images/seviceAchat.png";
 import serviceVente from "../images/serviceVente.png";
 import serviceAffiliation from "../images/serviceAffiliation.png";
+
+///////////////////////uniquement du design pas de fonctionnelites///////////
 export const About = () => {
   return (
     <Box display="block">

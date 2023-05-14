@@ -41,8 +41,6 @@ import MenuItem from "@mui/material/MenuItem";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { Login } from "../pages/loginForm";
 import { Panier } from "../pages/panier";
-import { Favorit } from "../pages/wishList";
-
 import FormInscription from "../pages/FormInscription";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -56,7 +54,7 @@ const Header = (props) => {
     { id: 4, name: "A propos" },
   ];
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);//menu open handler
   const openMenue = Boolean(anchorEl);
   const handleClickMenue = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,7 +65,7 @@ const Header = (props) => {
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const history = useHistory();
+  const history = useHistory();// react router dom
   const [open, setOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState("");
   const [dialogW, setDialogW] = useState(false);

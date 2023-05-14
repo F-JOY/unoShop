@@ -72,7 +72,7 @@ export const Panier = (props) => {
   });
   /////////////////////recuperer Adresse et telephone du user//////////////////
   ///////////////////Asynchronisation functions issus//////////////////////
-  /////////////n the use effect hook to set the adresse and telephone whene panier rendered ///////////
+  ///////////// the use effect hook to set the adresse and telephone whene panier rendered ///////////
   useEffect(() => {
     getUserById(localStorage.getItem("userId"));
   }, []);

@@ -67,9 +67,9 @@ export default function Produits(props) {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [ajoutTerminer,setAjouotTerminer]=useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [showAlert2, setShowAlert2] = useState(false);
-  const [showAlert3, setShowAlert3] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);// produit ajouter
+  const [showAlert2, setShowAlert2] = useState(false);// favorie ajouter
+  const [showAlert3, setShowAlert3] = useState(false);//favorie existe dija
   const [shouldUpdate, setShouldUpdate] = useState(false);
    const[favCount,setFavCount]=useState();
 
@@ -93,7 +93,7 @@ export default function Produits(props) {
 
 
 
-  ////////////////////props handler//////////////////////
+  ////////////////////props handler des donne envoyer des child component //////////////////////
   const updatedPanierProduct = (newCartData) => {
     setPanierProduct(newCartData);
   };
@@ -125,7 +125,7 @@ export default function Produits(props) {
   const handleClose2 = () => {
     setOpen2(false);
   };
-  ////////////////////////Ajouter Favorie////////////////////////////////
+  ////////////////////////http req Ajouter Favorie heart icon Click////////////////////////////////
   const AddFavorie = async (prodId) => {
     
     try {
@@ -161,7 +161,7 @@ export default function Produits(props) {
       console.error(error);
     }
   };
-//////////////////////////recupiration des favories////////////////////////
+//////////////////////////recupiration des favories pour le badge : count favories////////////////////////
 const getAllFavoris = async () => {
 
   try {
@@ -190,7 +190,7 @@ const getAllFavoris = async () => {
 };
 
 
-  ////////////////recupere detail d'un produit par _id/////////////////
+  ////////////////recupere detail d'un produit par _id on Product clicked/////////////////
 
   const handleShowProduct = async (prodId) => {
     try {
@@ -225,7 +225,7 @@ const getAllFavoris = async () => {
     }
   };
 
-  /////////////////////http requeste :recuperer les produit d'un categorie specefice////////////////////
+  /////////////////////http requeste :recuperer les produit d'un categorie specefice onCatClicked////////////////////
   const getCatProduct = async (catId) => {
     try {
       const response = await fetch(
@@ -266,7 +266,7 @@ const getAllFavoris = async () => {
       console.error(error);
     }
   };
-  ////////////////////////////recuperer les Produits de dernier Ajouter////////////////////
+  ////////////////////////////recuperer les Produits de dernier Ajouter reverse get product////////////////////
   const getProduits = async () => {
     try {
       const response = await fetch("http://localhost:3001/api/v1/products", {
@@ -286,7 +286,7 @@ const getAllFavoris = async () => {
     }
   };
 
-  const classes = useStyles(); ///////Make Style for the drawer bcz the sx i not working
+  const classes = useStyles(); ///////Make Style for the drawer bcz the sx is not working
 
   return (
     <>
