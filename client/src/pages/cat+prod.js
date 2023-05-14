@@ -68,13 +68,16 @@ export default function Produits(props) {
   const [open2, setOpen2] = useState(false);
   const [ajoutTerminer,setAjouotTerminer]=useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showAlert2, setShowAlert2] = useState(false);
+  const [showAlert3, setShowAlert3] = useState(false);
   const [shouldUpdate, setShouldUpdate] = useState(false);
-
+   const[favCount,setFavCount]=useState();
 
 
   useEffect(() => {
     getCategorie();
     getProduits();
+    getAllFavoris();
     if (
       localStorage.getItem("type") === "Fournisseurs" ||
       localStorage.getItem("type") === "Admin"
@@ -86,6 +89,10 @@ export default function Produits(props) {
 
 
   }, [shouldUpdate]);
+
+
+
+
   ////////////////////props handler//////////////////////
   const updatedPanierProduct = (newCartData) => {
     setPanierProduct(newCartData);
@@ -99,7 +106,7 @@ export default function Produits(props) {
       setCatClicked(false);
   setTimeout(() => {
     setShowAlert(false);
-  }, 5000);
+  }, 4000);
     }
      
   }
@@ -118,6 +125,70 @@ export default function Produits(props) {
   const handleClose2 = () => {
     setOpen2(false);
   };
+  ////////////////////////Ajouter Favorie////////////////////////////////
+  const AddFavorie = async (prodId) => {
+    
+    try {
+       const authToken = "Bearer " + localStorage.getItem("token");
+        const user=localStorage.getItem("userId")
+      const response = await fetch(
+        "http://localhost:3001/api/v1/favoris",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authToken,
+          },
+         body: JSON.stringify({user: user,product:prodId})
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+       console.log(data);
+       setShowAlert2(true);
+   setTimeout(() => {
+     setShowAlert2(false);
+   }, 3000);
+     
+      } else {
+        console.log(data);
+        setShowAlert3(true);
+        setTimeout(() => {
+          setShowAlert3(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+//////////////////////////recupiration des favories////////////////////////
+const getAllFavoris = async () => {
+
+  try {
+    const authToken = "Bearer " + localStorage.getItem("token");
+   const response = await fetch(
+     "http://localhost:3001/api/v1/favoris",
+     {
+       method: "GET",
+       headers: {
+         Authorization: authToken,
+       },
+      
+     }
+   );
+   const data = await response.json();
+   if (response.ok) {
+    console.log(data);
+    setFavCount(data.length)
+    console.log(data.length)
+   } else {
+     console.log(data);
+   }
+ } catch (error) {
+   console.error(error);
+ }
+};
+
 
   ////////////////recupere detail d'un produit par _id/////////////////
 
@@ -222,6 +293,7 @@ export default function Produits(props) {
       <Header
         cartData={panierProduct}
         updatedPanierProduct={updatedPanierProduct}
+        favoriCount={favCount}
       />
      
       <Grid container>
@@ -448,7 +520,10 @@ export default function Produits(props) {
                               justifyContent="end"
                               sx={{ marginLeft: 10 }}
                             >
-                              <IconButton>
+                              <IconButton
+                              disabled={isDisabled}
+                              onClick={()=>{AddFavorie(prod._id)}}
+                              >
                                 <FontAwesomeIcon
                                   icon={faHeartCirclePlus}
                                   style={{ color: "#949494" }}
@@ -473,8 +548,18 @@ export default function Produits(props) {
                       </Grid>
                       <Grid item xs={6} md={6} sm={6} display="flex" justifyContent={"center"}>
                        {showAlert && (
-                    <Box display="flex" justifyContent="right">
+                    <Box display="flex" justifyContent="right" marginBottom={2}>
                      <Alert variant="filled" severity="success">Produit Ajouter avec succes</Alert>
+                      </Box>
+                      )}
+                      {showAlert2 && (
+                    <Box display="flex" justifyContent="right" marginBottom={2}>
+                     <Alert variant="filled" severity="success">Produit Ajouter au Favorie</Alert>
+                      </Box>
+                      )}
+                      {showAlert3 && (
+                    <Box display="flex" justifyContent="right" marginBottom={2}>
+                     <Alert variant="filled" severity="error">Produit existe dans vos favoris</Alert>
                       </Box>
                       )}
                       </Grid>
@@ -600,7 +685,9 @@ export default function Produits(props) {
                               justifyContent="end"
                               sx={{ marginLeft: 10 }}
                             >
-                              <IconButton>
+                              <IconButton
+                               disabled={isDisabled}
+                               onClick={()=>{AddFavorie(prod._id)}}>
                                 <FontAwesomeIcon
                                   icon={faHeartCirclePlus}
                                   style={{ color: "#949494" }}
@@ -749,7 +836,9 @@ export default function Produits(props) {
                       justifyContent="end"
                       sx={{ marginLeft: 4 }}
                     >
-                      <IconButton>
+                      <IconButton
+                       disabled={isDisabled}
+                       onClick={()=>{AddFavorie(prodDetaile._id)}}>
                         <FontAwesomeIcon
                           icon={faHeartCirclePlus}
                           style={{ color: "#949494" }}

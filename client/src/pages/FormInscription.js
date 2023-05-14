@@ -275,20 +275,21 @@ export default function FormInscription(props) {
             <Typography variant="h5" gutterBottom>
               Thank you for your order.
             </Typography>
-            <Typography variant="subtitle1">
-              Your order number is #2001539. We have emailed your order
-              confirmation, and will send you an update when your order has
-              shipped.
+            <Typography variant="body1">
+             Bienvenue sur UnoShop <Typography variant="body1" fontWeight={"bold"}>{nom} {prenom} </Typography> 
+             profiter bien de nos services
             </Typography>
-            
+            <Box height={"400px"} display={"flex"} justifyContent={"end"}>
             <Button
                   variant="contained"
                   type="submit" variant="contained"
-                  sx={{ mt: 3, ml: 1 }}
+                  sx={{ mt: 3, ml: 1 ,height:"30px"}}
                  
                 >
                   terminer
                 </Button>
+                
+                </Box>
           </Fragment>
         ) : (
           <Fragment>

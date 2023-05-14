@@ -79,6 +79,7 @@ const Header = (props) => {
   const [isConnected, setIsConnected] = useState("");
   const [photo, setPhoto] = useState("");
   const [isFornisseur, setIsfournisseur] = useState(false);
+  const [favBadge,setFavBadge]=useState(props.favoriCount);
   ////////////////////////fonction du dialogue////////////////////
   const handleOpen = () => {
     setOpen(true);
@@ -237,9 +238,12 @@ const Header = (props) => {
                 localStorage.getItem("type") === "Client" ? (
                   <>
                     <IconButton onClick={() => {history.push("/ProfilClient");}}>
+
+                    <Badge badgeContent={favBadge} color="secondary">
                       <FavoriteBorderOutlinedIcon
                         sx={{ color: "black", fontSize: "30px" }}
                       />
+                      </Badge> 
                     </IconButton>
                     <IconButton
                       onClick={() => {

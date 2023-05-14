@@ -20,7 +20,7 @@ const productRoutes = require("./routes/productRoutes");
 const pannierRoutes = require("./routes/pannierRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-
+const favorisRoutes = require("./routes/favorisRoutes");
 //data base connection
 dbconnect();
 
@@ -66,7 +66,7 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/pannier", pannierRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/admin", adminRoutes);
-
+app.use("/api/v1/favoris", favorisRoutes);
 app.all("*", (req, res, next) => {
   next(new ApiError(`Can't find this route :${req.originalUrl}`, 400));
 });

@@ -16,6 +16,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Achat } from "../components/profilClientComponent/Achat";
 import { MexFournisseur } from "../components/profilClientComponent/fournisseur";
 import { ClientProfil } from "../components/profilClientComponent/ClientProfil";
+import { ClientFavoris } from "../components/profilClientComponent/ClientFavorie";
 export const ProfilClient = () => {
   const [clickProfil, setClickProfil] = useState(true);
   const [clickAchat, setClickAchat] = useState(false);
@@ -114,7 +115,7 @@ export const ProfilClient = () => {
           {clickAchat ? (
            <Achat />
           ) : clickFavorie ? (
-            <Typography>Favorie</Typography>
+           <ClientFavoris/>
           ) : clickFornis ?(
             <MexFournisseur/>
           ):clickProfil?(
